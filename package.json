@@ -1,0 +1,36 @@
+{
+  "name": "my-test-graphql-server",
+  "version": "1.0.0",
+  "description": "This is a base structured project for a GraphQL server, using nexus for schema generation and pg-promise for database operations",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node .",
+    "start:dev": "concurrently -k -p \"[{name}]\" -c \"yellow.bold,cyan.bold,green.bold\" -n \"TypeScript,Node\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-node": "nodemon -r dotenv/config dist",
+    "watch-ts": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omid Nowrouzi <onowrouzi@outlook.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/graphql-iso-date": "^3.3.1",
+    "@types/uuid": "^3.4.4",
+    "apollo-server": "^2.5.0",
+    "bluebird": "^3.5.4",
+    "dotenv": "^8.0.0",
+    "graphql": "^14.3.0",
+    "graphql-iso-date": "^3.6.1",
+    "nexus": "^0.11.7",
+    "pg-promise": "^8.7.1",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.26",
+    "@types/graphql": "^14.2.0",
+    "@types/typescript": "^2.0.0",
+    "concurrently": "^4.1.0",
+    "copyfiles": "^2.1.0",
+    "nodemon": "^1.19.0",
+    "typescript": "^3.4.5"
+  }
+}

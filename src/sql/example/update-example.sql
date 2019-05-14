@@ -1,0 +1,1 @@
+UPDATE $1:name SET name = '$2:value', updated_at = '$3:value' WHERE id = '$4:value' RETURNING *;

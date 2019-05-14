@@ -1,0 +1,1 @@
+INSERT INTO $1:name (name, deleted) VALUES ('$2:value', $3:value) RETURNING *;

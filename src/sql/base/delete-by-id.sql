@@ -1,0 +1,1 @@
+DELETE FROM $1:name WHERE id = '$2:value';
