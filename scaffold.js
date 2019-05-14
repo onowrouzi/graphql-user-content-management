@@ -18,10 +18,10 @@ async function createScaffold(name) {
 
   parseNames(name);
 
-  createModel();
   createSchema();
   createRepository();
   createService();
+  createSql();
 }
 
 function parseNames(name) {
@@ -44,102 +44,6 @@ function exists(path) {
   return doesExist;
 }
 
-function createModel() {
-  var path = __dirname + "/src/models/" + names.kebab + ".ts";
-  if (exists(path)) {
-    return;
-  }
-
-  var modelsPath = path.replace(names.kebab, "index");
-  var models = fs.readFileSync(modelsPath, "utf-8");
-  var modelLines = models.split("\n");
-
-  var indexOfImports = _.findIndex(modelLines, l =>
-    l.includes(`import sequelize = require("sequelize");`)
-  );
-  modelLines.splice(
-    indexOfImports + 2,
-    0,
-    `import { init${names.proper}s, ${names.proper}Instance, ${
-      names.proper
-    }Attributes } from "./${names.kebab}";`
-  );
-
-  var indexOfModels = _.findIndex(modelLines, l =>
-    l.includes("export interface Models {")
-  );
-  modelLines.splice(
-    indexOfModels + 1,
-    0,
-    `   ${names.proper}s: sequelize.Model<${names.proper}Instance, ${
-      names.proper
-    }Attributes, ${names.proper}Attributes>;`
-  );
-
-  var indexOfGetModels = _.findIndex(modelLines, l =>
-    l.includes("export function getModels(sequelize: Sequelize): Models {")
-  );
-  modelLines.splice(
-    indexOfGetModels + 2,
-    0,
-    `    ${names.proper}s: init${names.proper}s(sequelize),`
-  );
-
-  models = modelLines.join("\n");
-  fs.writeFileSync(modelsPath, models);
-
-  fs.writeFileSync(
-    path,
-    `import Sequelize = require("sequelize");
-
-export type ${names.proper}Instance = Sequelize.Instance<${
-      names.proper
-    }Attributes> & ${names.proper}Attributes;
-export type ${names.proper}Model = Sequelize.Model<${names.proper}Instance, ${
-      names.proper
-    }Attributes>;
-
-export interface ${names.proper}Attributes {
-  id: string;
-  deleted?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export function init${names.proper}s(sequelize: Sequelize.Sequelize): ${
-      names.proper
-    }Model {
-  return sequelize.define<${names.proper}Instance, ${
-      names.proper
-    }Attributes>("${names.camel}", {
-    id: {
-      field: "id",
-      type: Sequelize.UUID,
-      primaryKey: true
-    },
-    deleted: {
-      field: "deleted",
-      type: Sequelize.BOOLEAN,
-      defaultValue: false
-    },
-    createdAt: {
-      field: "created_at",
-      allowNull: false,
-      type: Sequelize.DATE
-    },
-    updatedAt: {
-      field: "updated_at",
-      allowNull: false,
-      type: Sequelize.DATE
-    }
-  }, {
-    freezeTableName: true,
-    tableName: '${names.snake}'
-  });
-}`
-  );
-}
-
 function createSchema() {
   var path = __dirname + "/src/schemas/" + names.kebab + ".ts";
   if (exists(path)) {
@@ -149,116 +53,92 @@ function createSchema() {
   var schemaTypesPath = path.replace(names.kebab, "schema-types");
   var schemaTypes = fs.readFileSync(schemaTypesPath, "utf-8");
 
-  if (!schemaTypes.includes(`${names.proper} = "${names.proper}`)) {
+  if (!schemaTypes.includes(`${names.proper} = "${names.snake}"`)) {
     schemaTypes = schemaTypes.replace(
-      "}",
-      `  ${names.proper} = "${names.proper}",
-    ${names.proper}Input = "${names.proper}Input",
-}`
+      "{",
+      `{  
+        ${names.proper} = "${names.proper}",
+    ${names.proper}Input = "${names.proper}Input",`
     );
-
-    var schemaTypeLines = schemaTypes.split("\n");
-
-    schemaTypes =
-      schemaTypeLines[0] +
-      _.sortBy(schemaTypeLines.slice(1), [
-        function(l) {
-          return l.replace(/\s/g, "");
-        }
-      ]).join("\n");
 
     fs.writeFileSync(schemaTypesPath, schemaTypes);
 
     var indexPath = path.replace(names.kebab, "index");
     var schemaExports = fs.readFileSync(indexPath, "utf-8");
-    var schemaExportsLines = schemaExports.split("\n");
-    var indexOfObjects = _.findIndex(schemaExportsLines, l =>
-      l.includes("//objects")
-    );
-    schemaExportsLines.splice(
-      indexOfObjects + 1,
-      0,
-      `export * from "./${names.kebab}";`
-    );
+    schemaExports += `\nexport * from "./${names.kebab}";`;
 
-    fs.writeFileSync(indexPath, schemaExportsLines.join("\n"));
+    fs.writeFileSync(indexPath, schemaExports);
   }
 
   fs.writeFileSync(
     path,
     `import {
-            objectType,
-            inputObjectType,
-            mutationField,
-            arg,
-            queryField,
-            stringArg
-          } from "nexus";
-          
-          import { v4 as uuid } from "uuid";
-          import { SchemaTypes } from ".";
-          
-          export const ${names.camel} = objectType({
-            name: "${names.proper}",
-            definition(t) {
-              t.implements(SchemaTypes.Base);
-            }
-          });
-          
-          export const ${names.camel}InputType = inputObjectType({
-            name: SchemaTypes.${names.proper}Input,
-            definition(t) {
-              t.id("id", { nullable: true });
-            }
-          });
-          
-          export const create${names.proper} = mutationField("create${
-      names.proper
-    }", {
-            type: SchemaTypes.${names.proper},
-            args: {
-              payload: arg({ type: SchemaTypes.${
-                names.proper
-              }Input, required: true })
-            },
-            resolve: async (parent, { payload }, { services }) => {
-              return await services.${names.proper}.save(payload);
-            }
-          });
-          
-          export const get${names.proper} = queryField("${names.camel}", {
-            type: SchemaTypes.${names.proper},
-            nullable: true,
-            args: { id: stringArg({ required: true }) },
-            resolve: async (parent, { id }, { services }) => {
-              return await services.${names.proper}.get(id);
-            }
-          });
-          
-          export const update${names.proper} = mutationField("update${
-      names.proper
-    }", {
-            type: SchemaTypes.${names.proper},
-            args: {
-              payload: arg({ type: SchemaTypes.${
-                names.proper
-              }Input, required: true })
-            },
-            resolve: async (parent, { payload }, { services }) => {
-              return await services.${names.proper}.update(payload);
-            }
-          });
-          
-          export const delete${names.proper} = mutationField("delete${
-      names.proper
-    }", {
-            type: "String",
-            args: { id: stringArg({ required: true }) },
-            resolve: async (parent, { id }, { services }) => {
-              return await services.${names.proper}.delete(id);
-            }
-          });
-          `
+  objectType,
+  inputObjectType,
+  mutationField,
+  arg,
+  queryField,
+  stringArg
+} from "nexus";          
+import { SchemaTypes } from "./schema-types";
+import Base from "./base";
+
+export default class ${names.proper} extends Base {
+  // define properties here.
+}
+
+export const ${names.camel} = objectType({
+  name: "${names.proper}",
+  definition(t) {
+    t.implements(SchemaTypes.Base);
+    // define properties here.
+  }
+});
+
+export const ${names.camel}InputType = inputObjectType({
+  name: SchemaTypes.${names.proper}Input,
+  definition(t) {
+    t.id("id", { nullable: true });
+  }
+});
+
+export const create${names.proper} = mutationField("create${names.proper}", {
+  type: SchemaTypes.${names.proper},
+  args: {
+    payload: arg({ type: SchemaTypes.${names.proper}Input, required: true })
+  },
+  resolve: async (parent, { payload }, { services }) => {
+    return await services.${names.proper}.save(payload);
+  }
+});
+
+export const get${names.proper} = queryField("${names.camel}", {
+  type: SchemaTypes.${names.proper},
+  nullable: true,
+  args: { id: stringArg({ required: true }) },
+  resolve: async (parent, { id }, { services }) => {
+    return await services.${names.proper}.get(id);
+  }
+});
+
+export const update${names.proper} = mutationField("update${names.proper}", {
+  type: SchemaTypes.${names.proper},
+  args: {
+    payload: arg({ type: SchemaTypes.${names.proper}Input, required: true })
+  },
+  resolve: async (parent, { payload }, { services }) => {
+    return await services.${names.proper}.update(payload);
+  }
+});
+
+export const delete${names.proper} = mutationField("delete${names.proper}", {
+  type: "String",
+  args: { id: stringArg({ required: true }) },
+  resolve: async (parent, { id }, { services }) => {
+    return await services.${names.proper}.delete(id);
+  }
+});
+`
   );
 }
 
@@ -278,13 +158,49 @@ function createRepository() {
   repoLines.splice(
     indexOfExport + 1,
     0,
-    `    ${names.proper}Repo: ${names.proper}Repository;`
+    ` ${names.proper}s: ${names.proper}sRepository;`
   );
   repoLines.splice(
-    indexOfExport - 2,
     0,
-    `import ${names.proper}Repository from "./${names.kebab}.repository";`
+    0,
+    `import ${names.proper}sRepository from "./${names.kebab}.repository";`
   );
+
+  var dbPath = __dirname + "/src/db.ts";
+  if (!exists(dbPath)) {
+    console.error("cannot find path: " + dbPath);
+  } else {
+    var dbClass = fs.readFileSync(dbPath, "utf-8");
+    var dbLines = dbClass.split("\n");
+
+    dbLines.splice(
+      0,
+      0,
+      `import ${names.proper}sRepository from "./repositories/${
+        names.kebab
+      }.repository";`
+    );
+
+    var indexOfRepos = _.findIndex(dbLines, l =>
+      l.includes("// define repositories here.")
+    );
+    dbLines.splice(
+      indexOfRepos + 1,
+      0,
+      `         obj.${names.proper}s = new ${names.proper}sRepository();`
+    );
+
+    var indexOfCreateTables = _.findIndex(dbLines, l =>
+      l.includes("createTables() {")
+    );
+    dbLines.splice(
+      indexOfCreateTables + 5,
+      0,
+      `   // this.connection.${names.proper}s.createTable();`
+    );
+
+    fs.writeFileSync(dbPath, dbLines.join("\n"));
+  }
 
   repos = repoLines.join("\n");
   fs.writeFileSync(reposPath, repos);
@@ -292,61 +208,33 @@ function createRepository() {
   fs.writeFileSync(
     path,
     `import { BaseRepository } from "./base.repository";
-    import { ${names.proper}Instance } from "./../datamodels/${names.kebab}";
-    
-    export default class ${names.proper}Repository extends BaseRepository<${
+import { SchemaTypes } from "../schemas/schema-types";
+import sql from "../sql/sql-parser";
+import ${names.proper} from "../schemas/${names.kebab}";
+
+export default class ${names.proper}sRepository extends BaseRepository<${
       names.proper
-    }Instance> {
-      constructor() {
-        super();
-      }
-    
-      async get(id: string): Promise<${names.proper}Instance> {
-        return await this.models.${names.proper}s.findOne({
-          where: {
-            id: id,
-            deleted: false
-          }
-        });
-      }
-    
-      async delete(id: string): Promise<number> {
-        const [count, instances] = await this.models.${names.proper}s.update(
-          {
-            deleted: true
-          },
-          {
-            where: {
-              id: id
-            }
-          }
-        );
-    
-        return count;
-      }
-    
-      async upsert(payload: ${names.proper}Instance): Promise<${
-      names.proper
-    }Instance> {
-        const original = await this.get(payload.id);
-        const [record, created] = await this.models.${names.proper}s.upsert(
-          {
-            id: payload.id,
-            createdAt: payload.createdAt,
-            updatedAt: payload.updatedAt
-          },
-          {
-            returning: true
-          }
-        );
-    
-        return record;
-      }
-    
-      async query(parentId: string): Promise<Array<${names.proper}Instance>> {
-        return await this.models.${names.proper}s.findAll();
-      }
-    }
+    }> {
+  constructor() {
+    super(SchemaTypes.${names.proper});
+  }
+  
+  createTable(): Promise<null> {
+    throw new Error("Method not implemented.");
+  }
+  
+  upsert(payload: any): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+  
+  insert(payload: any): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+  
+  update(payload: any): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+}
     
     `
   );
@@ -392,50 +280,68 @@ function createService() {
   fs.writeFileSync(
     path,
     `import { BaseService } from "./base.service";
-  import { ${names.proper}Instance } from "./../datamodels/${names.kebab}";
-  import ${names.proper}Repository from "./../repositories/${
+import ${names.proper} from "./../schemas/${names.kebab}";
+import ${names.proper}sRepository from "./../repositories/${
       names.kebab
     }.repository";
-  import uuid = require("uuid");
-  
-  export default class ${names.proper}Service extends BaseService<${
+
+export default class ${names.proper}Service extends BaseService<${
       names.proper
-    }Instance, ${names.proper}Repository> {
-    constructor() {
-      super();
-      this.repo = new ${names.proper}Repository();
-    }
-  
-    async get(id: string): Promise<${names.proper}Instance> {
-      return await this.repo.get(id);
-    }
-  
-    async delete(id: string): Promise<number> {
-      return await this.repo.delete(id);
-    }
-  
-    async query(parentId: string): Promise<Array<${names.proper}Instance>> {
-      return await this.repo.query(parentId);
-    }
-  
-    async save(payload: ${names.proper}Instance): Promise<${
-      names.proper
-    }Instance> {
-      var ${names.camel} = Object.assign({}, payload, {
-        id: uuid(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      });
-      return await this.repo.upsert(${names.camel});
-    }
-  
-    async update(payload: ${names.proper}Instance): Promise<${
-      names.proper
-    }Instance> {
-      payload.updatedAt = new Date().toISOString();
-      return await this.repo.upsert(payload);
-    }
+    }, ${names.proper}sRepository> {
+  constructor() {
+    super();
+    this.repo = new ${names.proper}sRepository();
   }
-  `
+
+  async get(id: string): Promise<${names.proper}> {
+    return await this.repo.get(id);
+  }
+
+  async remove(id: string): Promise<number> {
+    return await this.repo.remove(id);
+  }
+
+  async query(parentId: string): Promise<Array<${names.proper}>> {
+    return await this.repo.all(parentId);
+  }
+
+  async save(payload: ${names.proper}): Promise<${names.proper}> {
+    return await this.repo.upsert(payload);
+  }
+
+  async update(payload: ${names.proper}): Promise<${names.proper}> {
+    return await this.repo.upsert(payload);
+  }
+}
+`
   );
+}
+
+function createSql() {
+  var path = __dirname + "/src/sql/" + names.kebab;
+  if (!exists(path)) {
+    fs.mkdirSync(path);
+  }
+
+  path += `/create-${names.kebab}-table.sql`;
+  if (exists(path)) {
+    return;
+  }
+
+  fs.writeFileSync(
+    path,
+    `CREATE TABLE IF NOT EXISTS ${names.snake} (
+  id uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v1(),
+  created_at timestamp NOT NULL DEFAULT current_timestamp,
+  updated_at timestamp NOT NULL DEFAULT current_timestamp,
+  deleted boolean
+)`
+  );
+
+  console.log(`
+Create table method added to db.ts but commented out.
+Please make your desired alterations to /src/sql/${names.kebab}/create-${
+    names.kebab
+  }-table.sql
+before uncommenting.`);
 }

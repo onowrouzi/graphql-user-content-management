@@ -32,10 +32,16 @@ export class Db {
       return;
     }
 
+    /**
+     * Configures what promise library to use.
+     * Also attaches repositories to the db connection
+     * to be used where needed.
+     */
     const initOptions: IOptions<Repositories> = {
       promiseLib: bluebird,
       extend(obj: Repositories, dc: any) {
-        obj.examples = new ExamplesRepository();
+        // define repositories here.
+        obj.Examples = new ExamplesRepository();
       }
     };
 
@@ -64,7 +70,7 @@ export class Db {
       return;
     }
 
-    this.connection.examples.createTable();
+    this.connection.Examples.createTable();
   }
 
   /**
