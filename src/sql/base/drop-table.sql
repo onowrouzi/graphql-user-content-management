@@ -1,1 +1,1 @@
-DROP TABLE $1:name;
+DROP TABLE ${table~};

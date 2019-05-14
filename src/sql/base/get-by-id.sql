@@ -1,1 +1,1 @@
-SELECT * FROM $1:name WHERE id = '$2:value';
+SELECT * FROM ${table~} WHERE id = ${id};

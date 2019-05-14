@@ -1,1 +1,0 @@
-SELECT * FROM $1:name ORDER BY created_at;

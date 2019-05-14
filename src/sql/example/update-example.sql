@@ -1,1 +1,1 @@
-UPDATE $1:name SET name = '$2:value', updated_at = '$3:value' WHERE id = '$4:value' RETURNING *;
+UPDATE ${table~} SET name = ${name}, updated_at = ${updated_at} WHERE id = ${id} RETURNING *;

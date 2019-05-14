@@ -8,16 +8,16 @@ import sql from "../sql/sql-parser";
  * Abstract parent class to define common methods and properties
  * as well as set rules for child classes.
  *
- * tableName: literal name of database table (corresponding with T).
+ * table: literal name of database table (corresponding with T).
  * db: database connection object.
  */
 export abstract class BaseRepository<T> {
-  tableName: SchemaTypes;
+  table: SchemaTypes;
   db: Db;
 
-  constructor(tableName: SchemaTypes) {
+  constructor(table: SchemaTypes) {
     this.db = Db.get();
-    this.tableName = tableName;
+    this.table = table;
   }
 
   /**
@@ -25,10 +25,10 @@ export abstract class BaseRepository<T> {
    * @param id : uuid (primary key)
    */
   async get(id: string): Promise<T> {
-    return (await this.db.connection.oneOrNone(sql("get-by-id.sql"), [
-      this.tableName,
+    return (await this.db.connection.oneOrNone(sql("get-by-id.sql"), {
+      table: this.table,
       id
-    ])) as T;
+    })) as T;
   }
 
   /**
@@ -38,7 +38,10 @@ export abstract class BaseRepository<T> {
   async remove(id: string): Promise<number> {
     return await this.db.connection.result(
       sql("delete-by-id.sql"),
-      [this.tableName, id],
+      {
+        table: this.table,
+        id
+      },
       (r: IResult) => r.rowCount
     );
   }
@@ -46,10 +49,11 @@ export abstract class BaseRepository<T> {
   /**
    * Get all records from table.
    */
-  async all(): Promise<T[]> {
-    return (await this.db.connection.any(sql("get-all-in-order-created.sql"), [
-      this.tableName
-    ])) as T[];
+  async all(orderBy?: string): Promise<T[]> {
+    return (await this.db.connection.any(sql("get-all-ordered.sql"), {
+      table: this.table,
+      order_by: orderBy || "created_at"
+    })) as T[];
   }
 
   /**
@@ -58,7 +62,9 @@ export abstract class BaseRepository<T> {
   async total(): Promise<number> {
     return await this.db.connection.one(
       sql("get-total-rows.sql"),
-      [this.tableName],
+      {
+        table: this.table
+      },
       (a: { count: number }) => +a.count
     );
   }
@@ -67,18 +73,18 @@ export abstract class BaseRepository<T> {
    * Drop table, deleting all records and the table itself.
    */
   async dropTable(): Promise<null> {
-    return await this.db.connection.none(sql("drop-table.sql"), [
-      this.tableName
-    ]);
+    return await this.db.connection.none(sql("drop-table.sql"), {
+      table: this.table
+    });
   }
 
   /**
    * Clears all records from table as well as corresponding/dependent data from other tables.
    */
   async removeAll(): Promise<null> {
-    return await this.db.connection.none(sql("remove-all-cascading.sql"), [
-      this.tableName
-    ]);
+    return await this.db.connection.none(sql("remove-all-cascading.sql"), {
+      table: this.table
+    });
   }
 
   /**

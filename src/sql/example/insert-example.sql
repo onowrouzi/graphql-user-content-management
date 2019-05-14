@@ -1,1 +1,1 @@
-INSERT INTO $1:name (name, deleted) VALUES ('$2:value', $3:value) RETURNING *;
+INSERT INTO ${table~} (name, deleted) VALUES (${name}, ${deleted}) RETURNING *;
