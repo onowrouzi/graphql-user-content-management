@@ -56,6 +56,17 @@ export abstract class BaseRepository<T> {
     })) as T[];
   }
 
+  async exists(id: string): Promise<boolean> {
+    return await this.db.connection.oneOrNone(
+      sql("exists-by-id.sql"),
+      {
+        table: this.table,
+        id: id
+      },
+      res => res.exists
+    );
+  }
+
   /**
    * Get total number of records from table.
    */
