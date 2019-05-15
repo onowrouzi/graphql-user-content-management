@@ -34,7 +34,6 @@ export default class ExamplesRepository extends BaseRepository<Example> {
   }
 
   async createTable(): Promise<null> {
-    await this.dropTable();
     return await this.db.connection.none(sql("create-example-table.sql"));
   }
 
