@@ -17,8 +17,7 @@ export default class ExamplesRepository extends BaseRepository<Example> {
       sql("insert-example.sql"),
       {
         table: this.table,
-        name: payload.name,
-        deleted: false
+        name: payload.name
       },
       inserted => inserted
     );
@@ -30,7 +29,6 @@ export default class ExamplesRepository extends BaseRepository<Example> {
       {
         table: this.table,
         name: payload.name,
-        updated_at: new Date(),
         id: payload.id
       },
       updated => updated
@@ -38,7 +36,9 @@ export default class ExamplesRepository extends BaseRepository<Example> {
   }
 
   async createTable(): Promise<null> {
-    return await this.db.connection.none(sql("create-example-table.sql"));
+    return await this.db.connection.none(sql("create-example-table.sql"), {
+      table: this.table
+    });
   }
 
   async upsert(payload: any): Promise<Example> {

@@ -4,6 +4,8 @@
  */
 export const enum SchemaTypes {
   Base = "base",
+  User = "user",
+  UserInput = "user_input",
   Example = "example",
   ExampleInput = "example_input"
 }

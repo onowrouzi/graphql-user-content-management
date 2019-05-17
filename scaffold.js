@@ -88,7 +88,7 @@ export default class ${names.proper} extends Base {
 }
 
 export const ${names.camel} = objectType({
-  name: "${names.proper}",
+  name: SchemaTypes.${names.proper},
   definition(t) {
     t.implements(SchemaTypes.Base);
     // define properties here.
@@ -223,15 +223,15 @@ export default class ${names.proper}sRepository extends BaseRepository<${
     throw new Error("Method not implemented.");
   }
   
-  upsert(payload: any): Promise<any> {
+  upsert(payload: ${names.proper}): Promise<${names.proper}> {
     throw new Error("Method not implemented.");
   }
   
-  insert(payload: any): Promise<any> {
+  insert(payload: ${names.proper}): Promise<${names.proper}> {
     throw new Error("Method not implemented.");
   }
   
-  update(payload: any): Promise<any> {
+  update(payload: ${names.proper}): Promise<${names.proper}> {
     throw new Error("Method not implemented.");
   }
 }
@@ -334,7 +334,7 @@ function createSql() {
   id uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v1(),
   created_at timestamp NOT NULL DEFAULT current_timestamp,
   updated_at timestamp NOT NULL DEFAULT current_timestamp,
-  deleted boolean
+  deleted boolean DEFAULT false
 )`
   );
 

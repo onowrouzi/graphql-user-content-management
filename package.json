@@ -16,6 +16,7 @@
     "@types/graphql-iso-date": "^3.3.1",
     "@types/uuid": "^3.4.4",
     "apollo-server": "^2.5.0",
+    "bcrypt": "^3.0.6",
     "bluebird": "^3.5.4",
     "dotenv": "^8.0.0",
     "graphql": "^14.3.0",

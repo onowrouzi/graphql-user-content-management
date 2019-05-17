@@ -32,6 +32,10 @@ const start = async () => {
       context: async ({ req }) => ({
         services: getServices()
       }),
+      formatError: err => {
+        // write generic graphql error intercepting logic here.
+        return err;
+      },
       tracing: process.env.NODE_ENV === "development",
       debug: process.env.NODE_ENV === "development"
     });

@@ -1,3 +1,4 @@
+import UsersRepository from "./repositories/user.repository";
 import * as bluebird from "bluebird";
 import * as path from "path";
 import { IMain, IDatabase, IOptions } from "pg-promise";
@@ -41,6 +42,7 @@ export class Db {
       promiseLib: bluebird,
       extend(obj: Repositories, dc: any) {
         // define repositories here.
+        obj.Users = new UsersRepository();
         obj.Examples = new ExamplesRepository();
       }
     };
@@ -70,6 +72,7 @@ export class Db {
       return;
     }
 
+    this.connection.Users.createTable();
     this.connection.Examples.createTable();
   }
 

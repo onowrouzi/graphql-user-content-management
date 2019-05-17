@@ -20,6 +20,12 @@ export interface NexusGenInputs {
     id?: string | null; // ID
     name?: string | null; // String
   }
+  user_input: { // input type
+    email?: string | null; // String
+    first_name?: string | null; // String
+    id?: string | null; // ID
+    last_name?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -35,7 +41,16 @@ export interface NexusGenRootTypes {
     name: string; // String!
     updated_at: any; // DateTime!
   }
-  base: NexusGenRootTypes['example'];
+  user: { // root type
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    email: string; // String!
+    first_name: string; // String!
+    id: string; // ID!
+    last_name: string; // String!
+    updated_at: any; // DateTime!
+  }
+  base: NexusGenRootTypes['example'] | NexusGenRootTypes['user'];
   String: string;
   Int: number;
   Float: number;
@@ -46,23 +61,38 @@ export interface NexusGenRootTypes {
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   example_input: NexusGenInputs['example_input'];
+  user_input: NexusGenInputs['user_input'];
 }
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createExample: NexusGenRootTypes['example']; // example!
+    createUser: NexusGenRootTypes['user']; // user!
     deleteExample: string; // String!
+    deleteUser: string; // String!
     updateExample: NexusGenRootTypes['example']; // example!
+    updateUser: NexusGenRootTypes['user']; // user!
   }
   Query: { // field return type
     example: NexusGenRootTypes['example']; // example!
     examples: NexusGenRootTypes['example'][]; // [example!]!
+    loginUser: NexusGenRootTypes['user']; // user!
+    user: NexusGenRootTypes['user'] | null; // user
   }
   example: { // field return type
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
     id: string; // ID!
     name: string; // String!
+    updated_at: any; // DateTime!
+  }
+  user: { // field return type
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    email: string; // String!
+    first_name: string; // String!
+    id: string; // ID!
+    last_name: string; // String!
     updated_at: any; // DateTime!
   }
   base: { // field return type
@@ -78,29 +108,46 @@ export interface NexusGenArgTypes {
     createExample: { // args
       payload: NexusGenInputs['example_input']; // example_input!
     }
+    createUser: { // args
+      password: string; // String!
+      payload: NexusGenInputs['user_input']; // user_input!
+    }
     deleteExample: { // args
+      id: string; // String!
+    }
+    deleteUser: { // args
       id: string; // String!
     }
     updateExample: { // args
       payload: NexusGenInputs['example_input']; // example_input!
+    }
+    updateUser: { // args
+      payload: NexusGenInputs['user_input']; // user_input!
     }
   }
   Query: {
     example: { // args
       id: string; // String!
     }
+    loginUser: { // args
+      email: string; // String!
+      password: string; // String!
+    }
+    user: { // args
+      id: string; // String!
+    }
   }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
-  base: "example"
+  base: "example" | "user"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "example";
+export type NexusGenObjectNames = "Mutation" | "Query" | "example" | "user";
 
-export type NexusGenInputNames = "example_input";
+export type NexusGenInputNames = "example_input" | "user_input";
 
 export type NexusGenEnumNames = never;
 

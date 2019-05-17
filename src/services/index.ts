@@ -1,3 +1,4 @@
+import UserService from "./user.service";
 import ExampleService from "./example.service";
 
 /**
@@ -5,6 +6,7 @@ import ExampleService from "./example.service";
  */
 export function getServices(): Services {
   return {
+    User: new UserService(),
     Example: new ExampleService()
   };
 }
@@ -13,5 +15,6 @@ export function getServices(): Services {
  * Strictly type services to include.
  */
 export interface Services {
+    User: UserService;
   Example: ExampleService;
 }

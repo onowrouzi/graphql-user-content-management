@@ -31,11 +31,33 @@ input example_input {
 
 type Mutation {
   createExample(payload: example_input!): example!
+  createUser(password: String!, payload: user_input!): user!
   deleteExample(id: String!): String!
+  deleteUser(id: String!): String!
   updateExample(payload: example_input!): example!
+  updateUser(payload: user_input!): user!
 }
 
 type Query {
   example(id: String!): example!
   examples: [example!]!
+  loginUser(email: String!, password: String!): user!
+  user(id: String!): user
+}
+
+type user implements base {
+  created_at: DateTime!
+  deleted: Boolean!
+  email: String!
+  first_name: String!
+  id: ID!
+  last_name: String!
+  updated_at: DateTime!
+}
+
+input user_input {
+  email: String
+  first_name: String
+  id: ID
+  last_name: String
 }

@@ -1,2 +1,3 @@
 INSERT INTO ${table~} (name, deleted) 
-VALUES (${name}, ${deleted}) RETURNING *;
+VALUES (${name}, false) 
+RETURNING *;
