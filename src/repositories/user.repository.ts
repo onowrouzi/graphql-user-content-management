@@ -9,31 +9,23 @@ export default class UsersRepository extends BaseRepository<User> {
   }
 
   async insert(payload: User) {
-    return await this.db.connection.one(
-      sql("insert-user.sql"),
-      {
-        table: this.table,
-        first_name: payload.first_name,
-        last_name: payload.last_name,
-        email: payload.email,
-        password_hash: payload.password_hash
-      },
-      inserted => inserted
-    );
+    return await this.db.connection.one(sql("insert-user.sql"), {
+      table: this.table,
+      first_name: payload.first_name,
+      last_name: payload.last_name,
+      email: payload.email,
+      password_hash: payload.password_hash
+    });
   }
 
   async update(payload: User) {
-    return await this.db.connection.one(
-      sql("update-user.sql"),
-      {
-        table: this.table,
-        first_name: payload.first_name,
-        last_name: payload.last_name,
-        email: payload.email,
-        id: payload.id
-      },
-      updated => updated
-    );
+    return await this.db.connection.one(sql("update-user.sql"), {
+      table: this.table,
+      first_name: payload.first_name,
+      last_name: payload.last_name,
+      email: payload.email,
+      id: payload.id
+    });
   }
 
   async createTable(): Promise<null> {

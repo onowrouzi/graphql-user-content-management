@@ -56,11 +56,11 @@ export abstract class BaseRepository<T> {
     })) as T[];
   }
 
-  async exists(id: string): Promise<boolean> {
+  async exists(id: string, table?: string): Promise<boolean> {
     return await this.db.connection.oneOrNone(
       sql("exists-by-id.sql"),
       {
-        table: this.table,
+        table: table || this.table,
         id: id
       },
       res => res.exists

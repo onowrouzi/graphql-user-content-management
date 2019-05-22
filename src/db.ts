@@ -1,3 +1,5 @@
+import CommentsRepository from "./repositories/comment.repository";
+import PostsRepository from "./repositories/post.repository";
 import UsersRepository from "./repositories/user.repository";
 import * as bluebird from "bluebird";
 import * as path from "path";
@@ -42,6 +44,8 @@ export class Db {
       promiseLib: bluebird,
       extend(obj: Repositories, dc: any) {
         // define repositories here.
+        obj.Comments = new CommentsRepository();
+        obj.Posts = new PostsRepository();
         obj.Users = new UsersRepository();
         obj.Examples = new ExamplesRepository();
       }
@@ -73,6 +77,8 @@ export class Db {
     }
 
     this.connection.Users.createTable();
+    this.connection.Posts.createTable();
+    this.connection.Comments.createTable();
     this.connection.Examples.createTable();
   }
 

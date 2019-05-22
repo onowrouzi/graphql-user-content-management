@@ -9,6 +9,29 @@ interface base {
   updated_at: DateTime!
 }
 
+type comment implements base {
+  comment_id: ID
+  content: String!
+  created_at: DateTime!
+  deleted: Boolean!
+  id: ID!
+  post: post!
+  post_id: ID!
+  replies: [comment!]
+  reply_depth: Int!
+  updated_at: DateTime!
+  user: user!
+  user_id: ID!
+}
+
+input comment_input {
+  comment_id: ID
+  content: String
+  id: ID
+  post_id: ID
+  user_id: ID
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
 `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO
@@ -30,18 +53,48 @@ input example_input {
 }
 
 type Mutation {
+  createComment(payload: comment_input!): comment!
   createExample(payload: example_input!): example!
+  createPost(payload: post_input!): post!
   createUser(password: String!, payload: user_input!): user!
+  deleteComment(id: String!): String!
   deleteExample(id: String!): String!
+  deletePost(id: String!): String!
   deleteUser(id: String!): String!
+  updateComment(payload: comment_input!): comment!
   updateExample(payload: example_input!): example!
+  updatePost(payload: post_input!): post!
   updateUser(payload: user_input!): user!
 }
 
+type post implements base {
+  comments: [comment!]
+  content: String!
+  created_at: DateTime!
+  deleted: Boolean!
+  id: ID!
+  title: String!
+  updated_at: DateTime!
+  user: user
+  user_id: ID!
+}
+
+input post_input {
+  content: String
+  id: ID
+  title: String
+  user_id: ID
+}
+
 type Query {
+  comment(id: String!): comment
   example(id: String!): example!
   examples: [example!]!
+  getCommentReplies(comment_id: String!): [comment!]!
+  getCommentsForPost(post_id: String!): [comment!]!
+  getPostsForUser(user_id: String!): [post!]!
   loginUser(email: String!, password: String!): user!
+  post(id: String!): post
   user(id: String!): user
 }
 
@@ -52,6 +105,7 @@ type user implements base {
   first_name: String!
   id: ID!
   last_name: String!
+  posts: [post!]
   updated_at: DateTime!
 }
 

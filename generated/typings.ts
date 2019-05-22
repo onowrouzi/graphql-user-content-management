@@ -16,9 +16,22 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  comment_input: { // input type
+    comment_id?: string | null; // ID
+    content?: string | null; // String
+    id?: string | null; // ID
+    post_id?: string | null; // ID
+    user_id?: string | null; // ID
+  }
   example_input: { // input type
     id?: string | null; // ID
     name?: string | null; // String
+  }
+  post_input: { // input type
+    content?: string | null; // String
+    id?: string | null; // ID
+    title?: string | null; // String
+    user_id?: string | null; // ID
   }
   user_input: { // input type
     email?: string | null; // String
@@ -34,12 +47,31 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
+  comment: { // root type
+    comment_id?: string | null; // ID
+    content: string; // String!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    id: string; // ID!
+    post_id: string; // ID!
+    updated_at: any; // DateTime!
+    user_id: string; // ID!
+  }
   example: { // root type
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
     id: string; // ID!
     name: string; // String!
     updated_at: any; // DateTime!
+  }
+  post: { // root type
+    content: string; // String!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    id: string; // ID!
+    title: string; // String!
+    updated_at: any; // DateTime!
+    user_id: string; // ID!
   }
   user: { // root type
     created_at: any; // DateTime!
@@ -50,7 +82,7 @@ export interface NexusGenRootTypes {
     last_name: string; // String!
     updated_at: any; // DateTime!
   }
-  base: NexusGenRootTypes['example'] | NexusGenRootTypes['user'];
+  base: NexusGenRootTypes['comment'] | NexusGenRootTypes['post'] | NexusGenRootTypes['user'] | NexusGenRootTypes['example'];
   String: string;
   Int: number;
   Float: number;
@@ -60,24 +92,51 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  comment_input: NexusGenInputs['comment_input'];
   example_input: NexusGenInputs['example_input'];
+  post_input: NexusGenInputs['post_input'];
   user_input: NexusGenInputs['user_input'];
 }
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
+    createComment: NexusGenRootTypes['comment']; // comment!
     createExample: NexusGenRootTypes['example']; // example!
+    createPost: NexusGenRootTypes['post']; // post!
     createUser: NexusGenRootTypes['user']; // user!
+    deleteComment: string; // String!
     deleteExample: string; // String!
+    deletePost: string; // String!
     deleteUser: string; // String!
+    updateComment: NexusGenRootTypes['comment']; // comment!
     updateExample: NexusGenRootTypes['example']; // example!
+    updatePost: NexusGenRootTypes['post']; // post!
     updateUser: NexusGenRootTypes['user']; // user!
   }
   Query: { // field return type
+    comment: NexusGenRootTypes['comment'] | null; // comment
     example: NexusGenRootTypes['example']; // example!
     examples: NexusGenRootTypes['example'][]; // [example!]!
+    getCommentReplies: NexusGenRootTypes['comment'][]; // [comment!]!
+    getCommentsForPost: NexusGenRootTypes['comment'][]; // [comment!]!
+    getPostsForUser: NexusGenRootTypes['post'][]; // [post!]!
     loginUser: NexusGenRootTypes['user']; // user!
+    post: NexusGenRootTypes['post'] | null; // post
     user: NexusGenRootTypes['user'] | null; // user
+  }
+  comment: { // field return type
+    comment_id: string | null; // ID
+    content: string; // String!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    id: string; // ID!
+    post: NexusGenRootTypes['post']; // post!
+    post_id: string; // ID!
+    replies: NexusGenRootTypes['comment'][] | null; // [comment!]
+    reply_depth: number; // Int!
+    updated_at: any; // DateTime!
+    user: NexusGenRootTypes['user']; // user!
+    user_id: string; // ID!
   }
   example: { // field return type
     created_at: any; // DateTime!
@@ -86,6 +145,17 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     updated_at: any; // DateTime!
   }
+  post: { // field return type
+    comments: NexusGenRootTypes['comment'][] | null; // [comment!]
+    content: string; // String!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    id: string; // ID!
+    title: string; // String!
+    updated_at: any; // DateTime!
+    user: NexusGenRootTypes['user'] | null; // user
+    user_id: string; // ID!
+  }
   user: { // field return type
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
@@ -93,6 +163,7 @@ export interface NexusGenFieldTypes {
     first_name: string; // String!
     id: string; // ID!
     last_name: string; // String!
+    posts: NexusGenRootTypes['post'][] | null; // [post!]
     updated_at: any; // DateTime!
   }
   base: { // field return type
@@ -105,33 +176,66 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createComment: { // args
+      payload: NexusGenInputs['comment_input']; // comment_input!
+    }
     createExample: { // args
       payload: NexusGenInputs['example_input']; // example_input!
+    }
+    createPost: { // args
+      payload: NexusGenInputs['post_input']; // post_input!
     }
     createUser: { // args
       password: string; // String!
       payload: NexusGenInputs['user_input']; // user_input!
     }
+    deleteComment: { // args
+      id: string; // String!
+    }
     deleteExample: { // args
+      id: string; // String!
+    }
+    deletePost: { // args
       id: string; // String!
     }
     deleteUser: { // args
       id: string; // String!
     }
+    updateComment: { // args
+      payload: NexusGenInputs['comment_input']; // comment_input!
+    }
     updateExample: { // args
       payload: NexusGenInputs['example_input']; // example_input!
+    }
+    updatePost: { // args
+      payload: NexusGenInputs['post_input']; // post_input!
     }
     updateUser: { // args
       payload: NexusGenInputs['user_input']; // user_input!
     }
   }
   Query: {
+    comment: { // args
+      id: string; // String!
+    }
     example: { // args
       id: string; // String!
+    }
+    getCommentReplies: { // args
+      comment_id: string; // String!
+    }
+    getCommentsForPost: { // args
+      post_id: string; // String!
+    }
+    getPostsForUser: { // args
+      user_id: string; // String!
     }
     loginUser: { // args
       email: string; // String!
       password: string; // String!
+    }
+    post: { // args
+      id: string; // String!
     }
     user: { // args
       id: string; // String!
@@ -140,14 +244,14 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
-  base: "example" | "user"
+  base: "comment" | "post" | "user" | "example"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "example" | "user";
+export type NexusGenObjectNames = "Mutation" | "Query" | "comment" | "example" | "post" | "user";
 
-export type NexusGenInputNames = "example_input" | "user_input";
+export type NexusGenInputNames = "comment_input" | "example_input" | "post_input" | "user_input";
 
 export type NexusGenEnumNames = never;
 

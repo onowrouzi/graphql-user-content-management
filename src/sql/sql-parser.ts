@@ -2,9 +2,16 @@ import { QueryFile, TQueryFileOptions } from "pg-promise";
 
 const path = require("path");
 
+const queries: QueryFileRecord[] = [];
+
 ///////////////////////////////////////////////
 // Helper for linking to external query files;
 export default function sql(file: string): QueryFile {
+  const existing = queries.find(q => q.file == file);
+  if (existing) {
+    return existing.query;
+  }
+
   const fullPath: string = path.join(__dirname, file);
   const options: TQueryFileOptions = {
     // minifying the SQL is always advised;
@@ -24,8 +31,15 @@ export default function sql(file: string): QueryFile {
     console.error(qf.error);
   }
 
+  queries.push({ file: file, query: qf });
+
   return qf;
 
   // See QueryFile API:
   // http://vitaly-t.github.io/pg-promise/QueryFile.html
+}
+
+export class QueryFileRecord {
+  file: string;
+  query: QueryFile;
 }

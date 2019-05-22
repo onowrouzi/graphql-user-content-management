@@ -26,7 +26,6 @@ export default class UserService extends BaseService<User, UsersRepository> {
 
     if (!record) {
       ErrorHandler.notFound();
-      return;
     }
 
     return record;
@@ -43,7 +42,6 @@ export default class UserService extends BaseService<User, UsersRepository> {
   async create(payload: User, password: string): Promise<User> {
     if (!payload || payload.id) {
       ErrorHandler.badInput("Cannot insert record with an id.");
-      return;
     }
 
     if (!password) {
@@ -62,12 +60,10 @@ export default class UserService extends BaseService<User, UsersRepository> {
   async update(payload: User): Promise<User> {
     if (!payload || !payload.id) {
       ErrorHandler.badInput("Cannot update record without an id.");
-      return;
     }
 
     if (!(await this.repo.exists(payload.id))) {
       ErrorHandler.badInput("No matching record.");
-      return;
     }
 
     return await this.repo.upsert(payload);

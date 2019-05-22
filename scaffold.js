@@ -57,8 +57,8 @@ function createSchema() {
     schemaTypes = schemaTypes.replace(
       "{",
       `{  
-        ${names.proper} = "${names.proper}",
-    ${names.proper}Input = "${names.proper}Input",`
+        ${names.proper} = "${names.snake}",
+    ${names.proper}Input = "${names.snake}_input",`
     );
 
     fs.writeFileSync(schemaTypesPath, schemaTypes);
@@ -135,7 +135,7 @@ export const delete${names.proper} = mutationField("delete${names.proper}", {
   type: "String",
   args: { id: stringArg({ required: true }) },
   resolve: async (parent, { id }, { services }) => {
-    return await services.${names.proper}.delete(id);
+    return await services.${names.proper}.remove(id);
   }
 });
 `

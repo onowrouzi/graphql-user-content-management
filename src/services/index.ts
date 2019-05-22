@@ -1,3 +1,5 @@
+import CommentService from "./comment.service";
+import PostService from "./post.service";
 import UserService from "./user.service";
 import ExampleService from "./example.service";
 
@@ -6,6 +8,8 @@ import ExampleService from "./example.service";
  */
 export function getServices(): Services {
   return {
+    Comment: new CommentService(),
+    Post: new PostService(),
     User: new UserService(),
     Example: new ExampleService()
   };
@@ -15,6 +19,8 @@ export function getServices(): Services {
  * Strictly type services to include.
  */
 export interface Services {
+    Comment: CommentService;
+    Post: PostService;
     User: UserService;
   Example: ExampleService;
 }

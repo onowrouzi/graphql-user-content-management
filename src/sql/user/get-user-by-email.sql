@@ -1,1 +1,2 @@
-SELECT * FROM ${table~} WHERE email = ${email};
+SELECT * FROM ${table~} 
+WHERE email = ${email};

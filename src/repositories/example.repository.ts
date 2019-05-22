@@ -13,26 +13,18 @@ export default class ExamplesRepository extends BaseRepository<Example> {
   }
 
   async insert(payload: Example) {
-    return await this.db.connection.one(
-      sql("insert-example.sql"),
-      {
-        table: this.table,
-        name: payload.name
-      },
-      inserted => inserted
-    );
+    return await this.db.connection.one(sql("insert-example.sql"), {
+      table: this.table,
+      name: payload.name
+    });
   }
 
   async update(payload: Example) {
-    return await this.db.connection.one(
-      sql("update-example.sql"),
-      {
-        table: this.table,
-        name: payload.name,
-        id: payload.id
-      },
-      updated => updated
-    );
+    return await this.db.connection.one(sql("update-example.sql"), {
+      table: this.table,
+      name: payload.name,
+      id: payload.id
+    });
   }
 
   async createTable(): Promise<null> {

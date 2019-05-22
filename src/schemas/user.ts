@@ -24,6 +24,12 @@ export const user = objectType({
     t.string("first_name");
     t.string("last_name");
     t.string("email");
+    t.list.field("posts", {
+      type: SchemaTypes.Post,
+      nullable: true,
+      resolve: async (user, {}, { services }) =>
+        await services.Post.query(user.id)
+    });
   }
 });
 
@@ -43,9 +49,8 @@ export const loginUser = queryField("loginUser", {
     email: stringArg({ required: true }),
     password: stringArg({ required: true })
   },
-  resolve: async (parent, { email, password }, { services }) => {
-    return await services.User.login(email, password);
-  }
+  resolve: async (parent, { email, password }, { services }) =>
+    await services.User.login(email, password)
 });
 
 export const createUser = mutationField("createUser", {
@@ -54,18 +59,15 @@ export const createUser = mutationField("createUser", {
     payload: arg({ type: SchemaTypes.UserInput, required: true }),
     password: stringArg({ required: true })
   },
-  resolve: async (parent, { payload, password }, { services }) => {
-    return await services.User.create(payload, password);
-  }
+  resolve: async (parent, { payload, password }, { services }) =>
+    await services.User.create(payload, password)
 });
 
 export const getUser = queryField("user", {
   type: SchemaTypes.User,
   nullable: true,
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) => {
-    return await services.User.get(id);
-  }
+  resolve: async (parent, { id }, { services }) => await services.User.get(id)
 });
 
 export const updateUser = mutationField("updateUser", {
@@ -73,15 +75,13 @@ export const updateUser = mutationField("updateUser", {
   args: {
     payload: arg({ type: SchemaTypes.UserInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) => {
-    return await services.User.update(payload);
-  }
+  resolve: async (parent, { payload }, { services }) =>
+    await services.User.update(payload)
 });
 
 export const deleteUser = mutationField("deleteUser", {
   type: "String",
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) => {
-    return await services.User.remove(id);
-  }
+  resolve: async (parent, { id }, { services }) =>
+    await services.User.remove(id)
 });
