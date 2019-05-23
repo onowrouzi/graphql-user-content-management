@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import Post from "./../schemas/post";
+import { Post } from "./../schemas/post";
 import PostsRepository from "./../repositories/post.repository";
 import ErrorHandler from "../utilities/error-handler";
 import { SchemaTypes } from "../schemas/schema-types";

@@ -9,14 +9,9 @@ import {
   unionType
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import Base from "./base";
+import { NexusGenFieldTypes } from "../../generated/typings";
 
-export default class UserLike extends Base {
-  user_id: string;
-  content_id: string;
-  liked: boolean;
-  content_type: LikeTypes;
-}
+export type UserLike = NexusGenFieldTypes[SchemaTypes.UserLike];
 
 export const enum LikeTypes {
   Post = SchemaTypes.Post,
@@ -32,9 +27,7 @@ export const likeTypesUnion = unionType({
   name: SchemaTypes.LikeTypesUnion,
   definition(t) {
     t.members(SchemaTypes.Post, SchemaTypes.Comment);
-    t.resolveType(data =>
-      data.title ? SchemaTypes.Post : SchemaTypes.Comment
-    );
+    t.resolveType(() => null);
   }
 });
 
@@ -48,16 +41,16 @@ export const userLike = objectType({
     t.field("content_type", { type: SchemaTypes.LikeTypes });
     t.field("user", {
       type: SchemaTypes.User,
-      resolve: async (userLike, {}, { services }) =>
+      resolve: async (userLike: UserLike, {}, { services }) =>
         await services.User.get(userLike.user_id)
     });
     t.field("content", {
       type: SchemaTypes.LikeTypesUnion,
-      resolve: async (userLike, {}, { services }) => {
+      resolve: async (userLike: UserLike, {}, { services }) => {
         switch (userLike.content_type) {
-          case LikeTypes.Post:
+          case "post":
             return await services.Post.get(userLike.content_id);
-          case LikeTypes.Comment:
+          case "comment":
             return await services.Comment.get(userLike.content_id);
         }
       }

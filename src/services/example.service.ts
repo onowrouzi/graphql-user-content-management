@@ -3,7 +3,7 @@
  */
 import { BaseService } from "./base.service";
 import ExampleRepository from "../repositories/example.repository";
-import Example from "../schemas/example";
+import { Example } from "../schemas/example";
 import ErrorHandler from "../utilities/error-handler";
 
 export default class ExampleService extends BaseService<

@@ -2,11 +2,11 @@
   "name": "my-test-graphql-server",
   "version": "1.0.0",
   "description": "This is a base structured project for a GraphQL server, using nexus for schema generation and pg-promise for database operations",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "start": "node .",
     "start:dev": "concurrently -k -p \"[{name}]\" -c \"yellow.bold,cyan.bold,green.bold\" -n \"TypeScript,Node\" \"npm run watch-ts\" \"npm run watch-node\"",
-    "watch-node": "nodemon -r dotenv/config dist",
+    "watch-node": "nodemon -r dotenv/config dist/src",
     "watch-ts": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

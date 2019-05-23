@@ -5,7 +5,7 @@
 import { BaseRepository } from "./base.repository";
 import { SchemaTypes } from "../schemas/schema-types";
 import sql from "../sql/sql-parser";
-import Example from "../schemas/example";
+import { Example } from "../schemas/example";
 
 export default class ExamplesRepository extends BaseRepository<Example> {
   constructor() {

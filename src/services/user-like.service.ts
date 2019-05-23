@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import UserLike from "./../schemas/user-like";
+import { UserLike } from "./../schemas/user-like";
 import UserLikesRepository from "./../repositories/user-like.repository";
 import ErrorHandler from "../utilities/error-handler";
 import { SchemaTypes } from "../schemas/schema-types";

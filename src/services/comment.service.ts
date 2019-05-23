@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import Comment from "./../schemas/comment";
+import { Comment } from "./../schemas/comment";
 import CommentsRepository from "./../repositories/comment.repository";
 import ErrorHandler from "../utilities/error-handler";
 import { SchemaTypes } from "../schemas/schema-types";

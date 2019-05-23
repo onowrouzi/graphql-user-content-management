@@ -1,15 +1,18 @@
 import { BaseRepository } from "./base.repository";
 import { SchemaTypes } from "../schemas/schema-types";
 import sql from "../sql/sql-parser";
-import User from "../schemas/user";
+import { User } from "../schemas/user";
 
 export default class UsersRepository extends BaseRepository<User> {
   constructor() {
     super(SchemaTypes.User);
   }
 
-  async insert(payload: User) {
-    return await this.db.connection.one(sql("insert-user.sql"), payload);
+  async create(payload: User, hash: string) {
+    return await this.db.connection.one(
+      sql("insert-user.sql"),
+      Object.assign(payload, { password_hash: hash })
+    );
   }
 
   async update(payload: User) {
@@ -20,7 +23,7 @@ export default class UsersRepository extends BaseRepository<User> {
     return await this.db.connection.none(sql("create-user-table.sql"));
   }
 
-  async upsert(payload: any): Promise<User> {
+  async upsert(payload: User): Promise<User> {
     if (payload.id) {
       return await this.update(payload);
     } else {
@@ -36,5 +39,9 @@ export default class UsersRepository extends BaseRepository<User> {
     return await this.db.connection.oneOrNone(sql("get-user-by-email.sql"), {
       email: email
     });
+  }
+
+  insert(payload: User): Promise<User> {
+    throw new Error("Method not implemented.");
   }
 }

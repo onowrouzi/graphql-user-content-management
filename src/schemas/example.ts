@@ -15,11 +15,9 @@ import {
   inputObjectType
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import Base from "./base";
+import { NexusGenFieldTypes } from "../../generated/typings";
 
-export default class Example extends Base {
-  name: string;
-}
+export type Example = NexusGenFieldTypes[SchemaTypes.Example];
 
 export const example = objectType({
   name: SchemaTypes.Example,

@@ -1,7 +1,7 @@
 import { BaseRepository } from "./base.repository";
 import { SchemaTypes } from "../schemas/schema-types";
 import sql from "../sql/sql-parser";
-import Comment from "../schemas/comment";
+import { Comment } from "../schemas/comment";
 
 export default class CommentsRepository extends BaseRepository<Comment> {
   constructor() {

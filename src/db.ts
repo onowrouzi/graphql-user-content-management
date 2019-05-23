@@ -89,7 +89,7 @@ export class Db {
    * Copies sql files from original src to a flattened sql directory in dist.
    */
   copySqlFiles() {
-    const sqlDir = path.join(__dirname, "../src/sql/**/*.sql");
+    const sqlDir = path.join(__dirname, "../../src/sql/**/*.sql");
     const distDir = path.join(__dirname, "sql");
 
     cp([sqlDir, distDir], true, (err: any) => {

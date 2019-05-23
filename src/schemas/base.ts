@@ -1,6 +1,7 @@
 import { interfaceType, asNexusMethod } from "nexus";
 import { SchemaTypes } from "./schema-types";
 import { GraphQLDateTime } from "graphql-iso-date";
+import { NexusGenFieldTypes } from "./../../generated/typings";
 
 /**
  * Registers GraphQLDateTime scalar type to nexus (ex: t.date("my_date_time")).
@@ -10,12 +11,7 @@ export const GQLDate = asNexusMethod(GraphQLDateTime, "date");
 /**
  * Abstract parent class defining default properties.
  */
-export default abstract class Base {
-  id: string;
-  created_at: Date;
-  updated_at: Date;
-  deleted: boolean;
-}
+export type Base = NexusGenFieldTypes[SchemaTypes.Base];
 
 /**
  * Nexus schema representation of the Base class.

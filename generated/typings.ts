@@ -60,6 +60,7 @@ export interface NexusGenRootTypes {
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
     id: string; // ID!
+    post_id?: string | null; // ID
     updated_at: any; // DateTime!
     user_id: string; // ID!
   }
@@ -160,6 +161,7 @@ export interface NexusGenFieldTypes {
     likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
     likes_count: number; // Int!
     post: NexusGenRootTypes['post']; // post!
+    post_id: string | null; // ID
     replies: NexusGenRootTypes['comment'][] | null; // [comment!]
     reply_depth: number; // Int!
     updated_at: any; // DateTime!
@@ -219,6 +221,7 @@ export interface NexusGenFieldTypes {
   likable_content: { // field return type
     content: string; // String!
     dislikes_count: number; // Int!
+    id: string; // ID!
     likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
     likes_count: number; // Int!
     user: NexusGenRootTypes['user'] | null; // user

@@ -7,11 +7,10 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import LikableContent from "./likable-content";
+import { NexusGenFieldTypes } from "../../generated/typings";
+import { Comment } from "./comment";
 
-export default class Post extends LikableContent {
-  title: string;
-}
+export type Post = NexusGenFieldTypes[SchemaTypes.Post];
 
 export const post = objectType({
   name: SchemaTypes.Post,
@@ -22,8 +21,8 @@ export const post = objectType({
     t.list.field("comments", {
       type: SchemaTypes.Comment,
       nullable: true,
-      resolve: async (post, {}, { services }) =>
-        await services.Comment.query(post.id)
+      resolve: async (comment: Comment, {}, { services }) =>
+        await services.Comment.query(comment.id)
     });
   }
 });

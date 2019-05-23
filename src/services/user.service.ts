@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import User from "./../schemas/user";
+import { User } from "./../schemas/user";
 import UsersRepository from "./../repositories/user.repository";
 import ErrorHandler from "../utilities/error-handler";
 
@@ -48,9 +48,15 @@ export default class UserService extends BaseService<User, UsersRepository> {
       ErrorHandler.badInput("Must supply a password for a new user.");
     }
 
-    payload.password_hash = await bcrypt.hash(password, 10);
+    const user = await this.repo.getByEmail(payload.email);
+    if (user) {
+      ErrorHandler.badInput("User email already exists.");
+      return;
+    }
 
-    return await this.repo.insert(payload);
+    const hash = await bcrypt.hash(password, 10);
+
+    return await this.repo.create(payload, hash);
   }
 
   async save(payload: User): Promise<User> {

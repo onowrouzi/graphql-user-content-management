@@ -1,7 +1,7 @@
 import { BaseRepository } from "./base.repository";
 import { SchemaTypes } from "../schemas/schema-types";
 import sql from "../sql/sql-parser";
-import UserLike from "../schemas/user-like";
+import { UserLike } from "../schemas/user-like";
 import { IResult } from "pg-promise/typescript/pg-subset";
 
 export default class UserLikesRepository extends BaseRepository<UserLike> {

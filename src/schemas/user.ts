@@ -7,14 +7,9 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import Base from "./base";
+import { NexusGenFieldTypes } from "../../generated/typings";
 
-export default class User extends Base {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password_hash: string;
-}
+export type User = NexusGenFieldTypes[SchemaTypes.User];
 
 export const user = objectType({
   name: SchemaTypes.User,
@@ -27,13 +22,13 @@ export const user = objectType({
     t.list.field("posts", {
       type: SchemaTypes.Post,
       nullable: true,
-      resolve: async (user, {}, { services }) =>
+      resolve: async (user: User, {}, { services }) =>
         await services.Post.query(user.id)
     });
     t.list.field("likes", {
       type: SchemaTypes.UserLike,
       nullable: true,
-      resolve: async (user, {}, { services }) =>
+      resolve: async (user: User, {}, { services }) =>
         await services.UserLike.query(user.id)
     });
   }

@@ -1,7 +1,7 @@
 import { BaseRepository } from "./base.repository";
 import { SchemaTypes } from "../schemas/schema-types";
 import sql from "../sql/sql-parser";
-import Post from "../schemas/post";
+import { Post } from "../schemas/post";
 
 export default class PostsRepository extends BaseRepository<Post> {
   constructor() {

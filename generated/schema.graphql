@@ -19,6 +19,7 @@ type comment implements base & likable_content {
   likes: [user_like!]
   likes_count: Int!
   post: post!
+  post_id: ID
   replies: [comment!]
   reply_depth: Int!
   updated_at: DateTime!
@@ -57,6 +58,7 @@ input example_input {
 interface likable_content {
   content: String!
   dislikes_count: Int!
+  id: ID!
   likes: [user_like!]
   likes_count: Int!
   user: user
