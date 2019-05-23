@@ -7,30 +7,18 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import Base from "./base";
-import User from "./user";
+import LikableContent from "./likable-content";
 
-export default class Post extends Base {
+export default class Post extends LikableContent {
   title: string;
-  content: string;
-  user_id: string;
-  user: User;
-  comments: Comment[];
 }
 
 export const post = objectType({
   name: SchemaTypes.Post,
   definition(t) {
     t.implements(SchemaTypes.Base);
+    t.implements(SchemaTypes.LikableContent);
     t.string("title");
-    t.string("content");
-    t.id("user_id");
-    t.field("user", {
-      type: SchemaTypes.User,
-      nullable: true,
-      resolve: async (post, {}, { services }) =>
-        await services.User.get(post.user_id)
-    });
     t.list.field("comments", {
       type: SchemaTypes.Comment,
       nullable: true,

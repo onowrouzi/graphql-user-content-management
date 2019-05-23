@@ -9,9 +9,7 @@ export default class CommentsRepository extends BaseRepository<Comment> {
   }
 
   async createTable(): Promise<null> {
-    return await this.db.connection.none(sql("create-comment-table.sql"), {
-      table: this.table
-    });
+    return await this.db.connection.none(sql("create-comment-table.sql"));
   }
 
   async upsert(payload: Comment): Promise<Comment> {
@@ -23,33 +21,21 @@ export default class CommentsRepository extends BaseRepository<Comment> {
   }
 
   async insert(payload: Comment) {
-    return await this.db.connection.one(sql("insert-comment.sql"), {
-      table: this.table,
-      user_id: payload.user_id,
-      post_id: payload.post_id,
-      comment_id: payload.comment_id,
-      content: payload.content
-    });
+    return await this.db.connection.one(sql("insert-comment.sql"), payload);
   }
 
   async update(payload: Comment) {
-    return await this.db.connection.one(sql("update-comment.sql"), {
-      table: this.table,
-      content: payload.content,
-      id: payload.id
-    });
+    return await this.db.connection.one(sql("update-comment.sql"), payload);
   }
 
   async getCommentsForPost(postId: string): Promise<Comment[]> {
     return await this.db.connection.any(sql("get-comments-for-post.sql"), {
-      table: this.table,
       post_id: postId
     });
   }
 
   async getCommentReplies(commentId: string): Promise<Comment[]> {
     return await this.db.connection.any(sql("get-replies-for-comment.sql"), {
-      table: this.table,
       comment_id: commentId
     });
   }

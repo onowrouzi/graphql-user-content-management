@@ -1,1 +1,1 @@
-SELECT count(*) FROM ${table~};
+SELECT COUNT(*) FROM ${table~};

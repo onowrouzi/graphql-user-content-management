@@ -7,34 +7,22 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import Base from "./base";
-import Post from "./post";
+import LikableContent from "./likable-content";
 
-export default class Comment extends Base {
-  user_id: string;
+export default class Comment extends LikableContent {
   post_id: string;
   comment_id: string;
-  replies: Comment[];
-  content: string;
-  post: Post;
 }
 
 export const comment = objectType({
   name: SchemaTypes.Comment,
   definition(t) {
     t.implements(SchemaTypes.Base);
-    t.id("user_id");
-    t.id("post_id");
+    t.implements(SchemaTypes.LikableContent);
     t.id("comment_id", { nullable: true });
     t.int("reply_depth", {
       resolve: async (comment, {}, { services }) =>
         await services.Comment.getReplyDepth(comment.id)
-    });
-    t.string("content");
-    t.field("user", {
-      type: SchemaTypes.User,
-      resolve: async (comment, {}, { services }) =>
-        await services.User.get(comment.user_id)
     });
     t.field("post", {
       type: SchemaTypes.Post,

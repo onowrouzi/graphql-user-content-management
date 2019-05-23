@@ -1,5 +1,5 @@
-UPDATE ${table~}
+UPDATE "example"
 SET name = ${name}, 
-    updated_at = current_timestamp
+    updated_at = CURRENT_TIMESTAMP
 WHERE id = ${id} 
 RETURNING *;

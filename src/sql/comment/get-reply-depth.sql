@@ -5,7 +5,7 @@ WITH RECURSIVE cte AS (
 
    UNION ALL
    SELECT c.id, cte.path || c.id
-   FROM   comment c
+   FROM   "comment" c
    JOIN   cte ON c.comment_id = cte.id
 )
 SELECT MAX(array_length(path, 1)) from cte;

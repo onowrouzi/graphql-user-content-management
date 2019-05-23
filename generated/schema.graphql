@@ -9,18 +9,20 @@ interface base {
   updated_at: DateTime!
 }
 
-type comment implements base {
+type comment implements base & likable_content {
   comment_id: ID
   content: String!
   created_at: DateTime!
   deleted: Boolean!
+  dislikes_count: Int!
   id: ID!
+  likes: [user_like!]
+  likes_count: Int!
   post: post!
-  post_id: ID!
   replies: [comment!]
   reply_depth: Int!
   updated_at: DateTime!
-  user: user!
+  user: user
   user_id: ID!
 }
 
@@ -52,27 +54,49 @@ input example_input {
   name: String
 }
 
+interface likable_content {
+  content: String!
+  dislikes_count: Int!
+  likes: [user_like!]
+  likes_count: Int!
+  user: user
+  user_id: ID!
+}
+
+enum like_types {
+  comment
+  post
+}
+
+union like_types_union = comment | post
+
 type Mutation {
   createComment(payload: comment_input!): comment!
   createExample(payload: example_input!): example!
   createPost(payload: post_input!): post!
   createUser(password: String!, payload: user_input!): user!
+  createUserLike(payload: user_like_input!): user_like!
   deleteComment(id: String!): String!
   deleteExample(id: String!): String!
   deletePost(id: String!): String!
   deleteUser(id: String!): String!
+  deleteUserLike(content_id: String!, user_id: String!): String!
   updateComment(payload: comment_input!): comment!
   updateExample(payload: example_input!): example!
   updatePost(payload: post_input!): post!
   updateUser(payload: user_input!): user!
+  updateUserLike(payload: user_like_input!): user_like!
 }
 
-type post implements base {
+type post implements base & likable_content {
   comments: [comment!]
   content: String!
   created_at: DateTime!
   deleted: Boolean!
+  dislikes_count: Int!
   id: ID!
+  likes: [user_like!]
+  likes_count: Int!
   title: String!
   updated_at: DateTime!
   user: user
@@ -88,6 +112,7 @@ input post_input {
 
 type Query {
   comment(id: String!): comment
+  contentLikes(content_id: String!): [user_like!]!
   example(id: String!): example!
   examples: [example!]!
   getCommentReplies(comment_id: String!): [comment!]!
@@ -96,6 +121,8 @@ type Query {
   loginUser(email: String!, password: String!): user!
   post(id: String!): post
   user(id: String!): user
+  userLike(content_id: String!, user_id: String!): user_like
+  userLikes(user_id: String!): [user_like!]!
 }
 
 type user implements base {
@@ -105,6 +132,7 @@ type user implements base {
   first_name: String!
   id: ID!
   last_name: String!
+  likes: [user_like!]
   posts: [post!]
   updated_at: DateTime!
 }
@@ -114,4 +142,24 @@ input user_input {
   first_name: String
   id: ID
   last_name: String
+}
+
+type user_like implements base {
+  content: like_types_union!
+  content_id: ID!
+  content_type: like_types!
+  created_at: DateTime!
+  deleted: Boolean!
+  id: ID!
+  liked: Boolean!
+  updated_at: DateTime!
+  user: user!
+  user_id: ID!
+}
+
+input user_like_input {
+  content_id: ID
+  content_type: like_types
+  liked: Boolean
+  user_id: ID
 }

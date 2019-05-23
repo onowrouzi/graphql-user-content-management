@@ -30,6 +30,12 @@ export const user = objectType({
       resolve: async (user, {}, { services }) =>
         await services.Post.query(user.id)
     });
+    t.list.field("likes", {
+      type: SchemaTypes.UserLike,
+      nullable: true,
+      resolve: async (user, {}, { services }) =>
+        await services.UserLike.query(user.id)
+    });
   }
 });
 

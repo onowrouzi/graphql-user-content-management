@@ -39,9 +39,16 @@ export interface NexusGenInputs {
     id?: string | null; // ID
     last_name?: string | null; // String
   }
+  user_like_input: { // input type
+    content_id?: string | null; // ID
+    content_type?: NexusGenEnums['like_types'] | null; // like_types
+    liked?: boolean | null; // Boolean
+    user_id?: string | null; // ID
+  }
 }
 
 export interface NexusGenEnums {
+  like_types: "comment" | "post"
 }
 
 export interface NexusGenRootTypes {
@@ -53,7 +60,6 @@ export interface NexusGenRootTypes {
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
     id: string; // ID!
-    post_id: string; // ID!
     updated_at: any; // DateTime!
     user_id: string; // ID!
   }
@@ -82,13 +88,25 @@ export interface NexusGenRootTypes {
     last_name: string; // String!
     updated_at: any; // DateTime!
   }
-  base: NexusGenRootTypes['comment'] | NexusGenRootTypes['post'] | NexusGenRootTypes['user'] | NexusGenRootTypes['example'];
+  user_like: { // root type
+    content_id: string; // ID!
+    content_type: NexusGenEnums['like_types']; // like_types!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    id: string; // ID!
+    liked: boolean; // Boolean!
+    updated_at: any; // DateTime!
+    user_id: string; // ID!
+  }
+  base: NexusGenRootTypes['comment'] | NexusGenRootTypes['user_like'] | NexusGenRootTypes['post'] | NexusGenRootTypes['user'] | NexusGenRootTypes['example'];
+  likable_content: NexusGenRootTypes['comment'] | NexusGenRootTypes['post'];
   String: string;
   Int: number;
   Float: number;
   Boolean: boolean;
   ID: string;
   DateTime: any;
+  like_types_union: NexusGenRootTypes['comment'] | NexusGenRootTypes['post'];
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -96,6 +114,8 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   example_input: NexusGenInputs['example_input'];
   post_input: NexusGenInputs['post_input'];
   user_input: NexusGenInputs['user_input'];
+  user_like_input: NexusGenInputs['user_like_input'];
+  like_types: NexusGenEnums['like_types'];
 }
 
 export interface NexusGenFieldTypes {
@@ -104,17 +124,21 @@ export interface NexusGenFieldTypes {
     createExample: NexusGenRootTypes['example']; // example!
     createPost: NexusGenRootTypes['post']; // post!
     createUser: NexusGenRootTypes['user']; // user!
+    createUserLike: NexusGenRootTypes['user_like']; // user_like!
     deleteComment: string; // String!
     deleteExample: string; // String!
     deletePost: string; // String!
     deleteUser: string; // String!
+    deleteUserLike: string; // String!
     updateComment: NexusGenRootTypes['comment']; // comment!
     updateExample: NexusGenRootTypes['example']; // example!
     updatePost: NexusGenRootTypes['post']; // post!
     updateUser: NexusGenRootTypes['user']; // user!
+    updateUserLike: NexusGenRootTypes['user_like']; // user_like!
   }
   Query: { // field return type
     comment: NexusGenRootTypes['comment'] | null; // comment
+    contentLikes: NexusGenRootTypes['user_like'][]; // [user_like!]!
     example: NexusGenRootTypes['example']; // example!
     examples: NexusGenRootTypes['example'][]; // [example!]!
     getCommentReplies: NexusGenRootTypes['comment'][]; // [comment!]!
@@ -123,19 +147,23 @@ export interface NexusGenFieldTypes {
     loginUser: NexusGenRootTypes['user']; // user!
     post: NexusGenRootTypes['post'] | null; // post
     user: NexusGenRootTypes['user'] | null; // user
+    userLike: NexusGenRootTypes['user_like'] | null; // user_like
+    userLikes: NexusGenRootTypes['user_like'][]; // [user_like!]!
   }
   comment: { // field return type
     comment_id: string | null; // ID
     content: string; // String!
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
+    dislikes_count: number; // Int!
     id: string; // ID!
+    likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
+    likes_count: number; // Int!
     post: NexusGenRootTypes['post']; // post!
-    post_id: string; // ID!
     replies: NexusGenRootTypes['comment'][] | null; // [comment!]
     reply_depth: number; // Int!
     updated_at: any; // DateTime!
-    user: NexusGenRootTypes['user']; // user!
+    user: NexusGenRootTypes['user'] | null; // user
     user_id: string; // ID!
   }
   example: { // field return type
@@ -150,7 +178,10 @@ export interface NexusGenFieldTypes {
     content: string; // String!
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
+    dislikes_count: number; // Int!
     id: string; // ID!
+    likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
+    likes_count: number; // Int!
     title: string; // String!
     updated_at: any; // DateTime!
     user: NexusGenRootTypes['user'] | null; // user
@@ -163,14 +194,35 @@ export interface NexusGenFieldTypes {
     first_name: string; // String!
     id: string; // ID!
     last_name: string; // String!
+    likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
     posts: NexusGenRootTypes['post'][] | null; // [post!]
     updated_at: any; // DateTime!
+  }
+  user_like: { // field return type
+    content: NexusGenRootTypes['like_types_union']; // like_types_union!
+    content_id: string; // ID!
+    content_type: NexusGenEnums['like_types']; // like_types!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    id: string; // ID!
+    liked: boolean; // Boolean!
+    updated_at: any; // DateTime!
+    user: NexusGenRootTypes['user']; // user!
+    user_id: string; // ID!
   }
   base: { // field return type
     created_at: any; // DateTime!
     deleted: boolean; // Boolean!
     id: string; // ID!
     updated_at: any; // DateTime!
+  }
+  likable_content: { // field return type
+    content: string; // String!
+    dislikes_count: number; // Int!
+    likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
+    likes_count: number; // Int!
+    user: NexusGenRootTypes['user'] | null; // user
+    user_id: string; // ID!
   }
 }
 
@@ -189,6 +241,9 @@ export interface NexusGenArgTypes {
       password: string; // String!
       payload: NexusGenInputs['user_input']; // user_input!
     }
+    createUserLike: { // args
+      payload: NexusGenInputs['user_like_input']; // user_like_input!
+    }
     deleteComment: { // args
       id: string; // String!
     }
@@ -200,6 +255,10 @@ export interface NexusGenArgTypes {
     }
     deleteUser: { // args
       id: string; // String!
+    }
+    deleteUserLike: { // args
+      content_id: string; // String!
+      user_id: string; // String!
     }
     updateComment: { // args
       payload: NexusGenInputs['comment_input']; // comment_input!
@@ -213,10 +272,16 @@ export interface NexusGenArgTypes {
     updateUser: { // args
       payload: NexusGenInputs['user_input']; // user_input!
     }
+    updateUserLike: { // args
+      payload: NexusGenInputs['user_like_input']; // user_like_input!
+    }
   }
   Query: {
     comment: { // args
       id: string; // String!
+    }
+    contentLikes: { // args
+      content_id: string; // String!
     }
     example: { // args
       id: string; // String!
@@ -240,26 +305,35 @@ export interface NexusGenArgTypes {
     user: { // args
       id: string; // String!
     }
+    userLike: { // args
+      content_id: string; // String!
+      user_id: string; // String!
+    }
+    userLikes: { // args
+      user_id: string; // String!
+    }
   }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
-  base: "comment" | "post" | "user" | "example"
+  like_types_union: "comment" | "post"
+  base: "comment" | "user_like" | "post" | "user" | "example"
+  likable_content: "comment" | "post"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "comment" | "example" | "post" | "user";
+export type NexusGenObjectNames = "Mutation" | "Query" | "comment" | "example" | "post" | "user" | "user_like";
 
-export type NexusGenInputNames = "comment_input" | "example_input" | "post_input" | "user_input";
+export type NexusGenInputNames = "comment_input" | "example_input" | "post_input" | "user_input" | "user_like_input";
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = "like_types";
 
-export type NexusGenInterfaceNames = "base";
+export type NexusGenInterfaceNames = "base" | "likable_content";
 
 export type NexusGenScalarNames = "Boolean" | "DateTime" | "Float" | "ID" | "Int" | "String";
 
-export type NexusGenUnionNames = never;
+export type NexusGenUnionNames = "like_types_union";
 
 export interface NexusGenTypes {
   context: any;

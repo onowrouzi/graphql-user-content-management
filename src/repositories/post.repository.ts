@@ -9,27 +9,15 @@ export default class PostsRepository extends BaseRepository<Post> {
   }
 
   async insert(payload: Post) {
-    return await this.db.connection.one(sql("insert-post.sql"), {
-      table: this.table,
-      title: payload.title,
-      content: payload.content,
-      user_id: payload.user_id
-    });
+    return await this.db.connection.one(sql("insert-post.sql"), payload);
   }
 
   async update(payload: Post) {
-    return await this.db.connection.one(sql("update-post.sql"), {
-      table: this.table,
-      title: payload.title,
-      content: payload.content,
-      id: payload.id
-    });
+    return await this.db.connection.one(sql("update-post.sql"), payload);
   }
 
   async createTable(): Promise<null> {
-    return await this.db.connection.none(sql("create-post-table.sql"), {
-      table: this.table
-    });
+    return await this.db.connection.none(sql("create-post-table.sql"));
   }
 
   async upsert(payload: any): Promise<Post> {

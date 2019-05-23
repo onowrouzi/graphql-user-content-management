@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS ${table~} (
+CREATE TABLE IF NOT EXISTS "user" (
   id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v1(),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
