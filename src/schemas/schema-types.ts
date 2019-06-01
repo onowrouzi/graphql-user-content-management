@@ -3,6 +3,7 @@
  * NOTE: values corresponding with database tables should match casing.
  */
 export const enum SchemaTypes {
+  AppToken = "app_token",
   Topic = "topic",
   TopicInput = "topic_input",
   UserLike = "user_like",

@@ -7,3 +7,4 @@ export * from "./post";
 export * from "./comment";
 export * from "./user-like";
 export * from "./likable-content";
+export * from "./app-token";

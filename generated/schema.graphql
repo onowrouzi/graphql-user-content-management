@@ -2,6 +2,12 @@
 ### Do not make changes to this file directly
 
 
+type app_token {
+  expiresAt: DateTime!
+  refreshToken: String
+  token: String!
+}
+
 interface base {
   created_at: DateTime!
   deleted: Boolean!
@@ -68,7 +74,7 @@ type Mutation {
   deletePost(id: String!): String!
   deleteUser(id: String!): String!
   deleteUserLike(content_id: String!, user_id: String!): String!
-  loginUser(email: String!, password: String!): String!
+  loginUser(email: String!, password: String!): app_token!
   updateComment(payload: comment_input!): comment!
   updatePost(payload: post_input!): post!
   updateUser(payload: user_input!): user!

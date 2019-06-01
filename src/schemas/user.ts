@@ -8,6 +8,7 @@ import {
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
 import { NexusGenFieldTypes } from "../../generated/nexus-typings";
+import AuthorizationService from "../services/authorization.service";
 
 export type User = NexusGenFieldTypes[SchemaTypes.User];
 
@@ -45,14 +46,14 @@ export const userInputType = inputObjectType({
 });
 
 export const loginUser = mutationField("loginUser", {
-  type: "String",
+  type: SchemaTypes.AppToken,
   args: {
     email: stringArg({ required: true }),
     password: stringArg({ required: true })
   },
   resolve: async (parent, { email, password }, { services }) => {
     const user = await services.User.login(email, password);
-    return services.Authorization.createToken(user.id);
+    return AuthorizationService.createToken(user.id);
   }
 });
 

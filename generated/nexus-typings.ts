@@ -50,6 +50,11 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
+  app_token: { // root type
+    expiresAt: any; // DateTime!
+    refreshToken?: string | null; // String
+    token: string; // String!
+  }
   comment: { // root type
     comment_id?: string | null; // ID
     content: string; // String!
@@ -117,7 +122,7 @@ export interface NexusGenFieldTypes {
     deletePost: string; // String!
     deleteUser: string; // String!
     deleteUserLike: string; // String!
-    loginUser: string; // String!
+    loginUser: NexusGenRootTypes['app_token']; // app_token!
     updateComment: NexusGenRootTypes['comment']; // comment!
     updatePost: NexusGenRootTypes['post']; // post!
     updateUser: NexusGenRootTypes['user']; // user!
@@ -133,6 +138,11 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['user'] | null; // user
     userLike: NexusGenRootTypes['user_like'] | null; // user_like
     userLikes: NexusGenRootTypes['user_like'][]; // [user_like!]!
+  }
+  app_token: { // field return type
+    expiresAt: any; // DateTime!
+    refreshToken: string | null; // String
+    token: string; // String!
   }
   comment: { // field return type
     comment_id: string | null; // ID
@@ -290,7 +300,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "comment" | "post" | "user" | "user_like";
+export type NexusGenObjectNames = "Mutation" | "Query" | "app_token" | "comment" | "post" | "user" | "user_like";
 
 export type NexusGenInputNames = "comment_input" | "post_input" | "user_input" | "user_like_input";
 
