@@ -45,18 +45,6 @@ export const userInputType = inputObjectType({
   }
 });
 
-export const loginUser = mutationField("loginUser", {
-  type: SchemaTypes.AppToken,
-  args: {
-    email: stringArg({ required: true }),
-    password: stringArg({ required: true })
-  },
-  resolve: async (parent, { email, password }, { services }) => {
-    const user = await services.User.login(email, password);
-    return AuthorizationService.createToken(user.id);
-  }
-});
-
 export const createUser = mutationField("createUser", {
   type: SchemaTypes.User,
   args: {

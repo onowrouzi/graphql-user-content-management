@@ -79,6 +79,7 @@ type Mutation {
   updatePost(payload: post_input!): post!
   updateUser(payload: user_input!): user!
   updateUserLike(payload: user_like_input!): user_like!
+  useRefreshToken(refreshToken: String!): app_token!
 }
 
 type post implements base & likable_content {

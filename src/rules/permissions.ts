@@ -8,6 +8,7 @@ export const permissions = shield({
   Mutation: {
     "*": isAuthenticated,
     loginUser: allow,
+    useRefreshToken: allow,
     createUser: allow
   }
 });

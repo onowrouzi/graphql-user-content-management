@@ -1,4 +1,5 @@
 import * as jwt from "jsonwebtoken";
+import ErrorHandler from "../utilities/error-handler";
 
 export default class AuthorizationService {
   static createToken(userId: string): AppToken {
@@ -18,17 +19,25 @@ export default class AuthorizationService {
     };
   }
 
+  static useRefreshToken(refreshToken: string): AppToken {
+    const verification = jwt.verify(
+      refreshToken,
+      process.env.APP_SECRET
+    ) as AppTokenVerification;
+
+    if (!verification.isRefresh || !verification.userId) {
+      ErrorHandler.notAuthorized();
+    }
+
+    return this.createToken(verification.userId);
+  }
+
   static getUserId(token: string): string {
     try {
       const verification = jwt.verify(
         token,
         process.env.APP_SECRET
       ) as AppTokenVerification;
-
-      if (verification.isRefresh) {
-        const appToken = this.createToken(verification.userId);
-        return this.getUserId(appToken.token);
-      }
 
       if (verification) {
         return verification.userId;

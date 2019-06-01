@@ -127,6 +127,7 @@ export interface NexusGenFieldTypes {
     updatePost: NexusGenRootTypes['post']; // post!
     updateUser: NexusGenRootTypes['user']; // user!
     updateUserLike: NexusGenRootTypes['user_like']; // user_like!
+    useRefreshToken: NexusGenRootTypes['app_token']; // app_token!
   }
   Query: { // field return type
     comment: NexusGenRootTypes['comment'] | null; // comment
@@ -258,6 +259,9 @@ export interface NexusGenArgTypes {
     }
     updateUserLike: { // args
       payload: NexusGenInputs['user_like_input']; // user_like_input!
+    }
+    useRefreshToken: { // args
+      refreshToken: string; // String!
     }
   }
   Query: {
