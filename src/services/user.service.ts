@@ -14,7 +14,11 @@ export default class UserService extends BaseService<User, UsersRepository> {
   async login(email: string, password: string): Promise<User> {
     var user = await this.repo.getByEmail(email);
 
-    if (user != null && (await bcrypt.compare(password, user.password_hash))) {
+    if (
+      user != null &&
+      user.id != null &&
+      (await bcrypt.compare(password, user.password_hash))
+    ) {
       return user;
     }
 
@@ -31,7 +35,11 @@ export default class UserService extends BaseService<User, UsersRepository> {
     return record;
   }
 
-  async remove(id: string): Promise<number> {
+  async remove(id: string, reqUserId: string): Promise<number> {
+    if (id != reqUserId) {
+      ErrorHandler.notAuthorized();
+    }
+
     return await this.repo.remove(id);
   }
 

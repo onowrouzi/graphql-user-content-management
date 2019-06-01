@@ -7,7 +7,7 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import { NexusGenFieldTypes } from "../../generated/typings";
+import { NexusGenFieldTypes } from "../../generated/nexus-typings";
 import { Comment } from "./comment";
 
 export type Post = NexusGenFieldTypes[SchemaTypes.Post];
@@ -31,9 +31,9 @@ export const postInputType = inputObjectType({
   name: SchemaTypes.PostInput,
   definition(t) {
     t.id("id", { nullable: true });
+    t.id("user_id", { nullable: true });
     t.string("title");
     t.string("content");
-    t.id("user_id");
   }
 });
 
@@ -42,8 +42,10 @@ export const createPost = mutationField("createPost", {
   args: {
     payload: arg({ type: SchemaTypes.PostInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) =>
-    await services.Post.save(payload)
+  resolve: async (parent, { payload }, { services, userId }) => {
+    payload.user_id = userId;
+    return await services.Post.save(payload);
+  }
 });
 
 export const getPost = queryField("post", {
@@ -66,13 +68,13 @@ export const updatePost = mutationField("updatePost", {
   args: {
     payload: arg({ type: SchemaTypes.PostInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) =>
-    await services.Post.update(payload)
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.Post.update(payload, userId)
 });
 
 export const deletePost = mutationField("deletePost", {
   type: "String",
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) =>
-    await services.Post.remove(id)
+  resolve: async (parent, { id }, { services, userId }) =>
+    await services.Post.remove(id, userId)
 });

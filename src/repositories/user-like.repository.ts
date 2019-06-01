@@ -62,7 +62,7 @@ export default class UserLikesRepository extends BaseRepository<UserLike> {
         user_id: userId,
         content_id: contentId
       },
-      res => res.exists
+      (res: any) => res.exists
     );
   }
 

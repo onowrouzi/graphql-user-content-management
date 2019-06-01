@@ -63,7 +63,7 @@ export abstract class BaseRepository<T> {
         table: table || this.table,
         id: id
       },
-      res => res.exists
+      (res: any) => res.exists
     );
   }
 

@@ -9,7 +9,7 @@ import {
   unionType
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import { NexusGenFieldTypes } from "../../generated/typings";
+import { NexusGenFieldTypes } from "../../generated/nexus-typings";
 
 export type UserLike = NexusGenFieldTypes[SchemaTypes.UserLike];
 
@@ -61,8 +61,8 @@ export const userLike = objectType({
 export const userLikeInputType = inputObjectType({
   name: SchemaTypes.UserLikeInput,
   definition(t) {
-    t.id("user_id");
     t.id("content_id");
+    t.id("user_id", { nullable: true });
     t.field("content_type", { type: SchemaTypes.LikeTypes });
     t.boolean("liked");
   }
@@ -73,8 +73,10 @@ export const createUserLike = mutationField("createUserLike", {
   args: {
     payload: arg({ type: SchemaTypes.UserLikeInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) =>
-    await services.UserLike.save(payload)
+  resolve: async (parent, { payload }, { services, userId }) => {
+    payload.user_id = userId;
+    return await services.UserLike.save(payload);
+  }
 });
 
 export const getUserLike = queryField("userLike", {
@@ -109,7 +111,8 @@ export const updateUserLike = mutationField("updateUserLike", {
   args: {
     payload: arg({ type: SchemaTypes.UserLikeInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) => {
+  resolve: async (parent, { payload }, { services, userId }) => {
+    payload.user_id = userId;
     return await services.UserLike.update(payload);
   }
 });
@@ -120,7 +123,6 @@ export const deleteUserLike = mutationField("deleteUserLike", {
     user_id: stringArg({ required: true }),
     content_id: stringArg({ required: true })
   },
-  resolve: async (parent, { user_id, content_id }, { services }) => {
-    return await services.UserLike.removeUserLike(user_id, content_id);
-  }
+  resolve: async (parent, { content_id }, { services, userId }) =>
+    await services.UserLike.remove(userId, content_id)
 });

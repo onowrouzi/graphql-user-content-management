@@ -7,7 +7,7 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import { NexusGenFieldTypes } from "../../generated/typings";
+import { NexusGenFieldTypes } from "../../generated/nexus-typings";
 
 export type Comment = NexusGenFieldTypes[SchemaTypes.Comment];
 
@@ -40,9 +40,9 @@ export const commentInputType = inputObjectType({
   name: SchemaTypes.CommentInput,
   definition(t) {
     t.id("id", { nullable: true });
-    t.id("user_id");
     t.id("post_id");
     t.id("comment_id", { nullable: true });
+    t.id("user_id", { nullable: true });
     t.string("content");
   }
 });
@@ -52,8 +52,10 @@ export const createComment = mutationField("createComment", {
   args: {
     payload: arg({ type: SchemaTypes.CommentInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) =>
-    await services.Comment.save(payload)
+  resolve: async (parent, { payload }, { services, userId }) => {
+    payload.user_id = userId;
+    return await services.Comment.save(payload);
+  }
 });
 
 export const getCommentsForPost = queryField("getCommentsForPost", {
@@ -89,13 +91,13 @@ export const updateComment = mutationField("updateComment", {
   args: {
     payload: arg({ type: SchemaTypes.CommentInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) =>
-    await services.Comment.update(payload)
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.Comment.update(payload, userId)
 });
 
 export const deleteComment = mutationField("deleteComment", {
   type: "String",
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) =>
-    await services.Comment.remove(id)
+  resolve: async (parent, { id }, { services, userId }) =>
+    await services.Comment.remove(id, userId)
 });

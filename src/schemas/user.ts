@@ -7,7 +7,7 @@ import {
   stringArg
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
-import { NexusGenFieldTypes } from "../../generated/typings";
+import { NexusGenFieldTypes } from "../../generated/nexus-typings";
 
 export type User = NexusGenFieldTypes[SchemaTypes.User];
 
@@ -44,14 +44,16 @@ export const userInputType = inputObjectType({
   }
 });
 
-export const loginUser = queryField("loginUser", {
-  type: SchemaTypes.User,
+export const loginUser = mutationField("loginUser", {
+  type: "String",
   args: {
     email: stringArg({ required: true }),
     password: stringArg({ required: true })
   },
-  resolve: async (parent, { email, password }, { services }) =>
-    await services.User.login(email, password)
+  resolve: async (parent, { email, password }, { services }) => {
+    const user = await services.User.login(email, password);
+    return services.Authorization.createToken(user.id);
+  }
 });
 
 export const createUser = mutationField("createUser", {
@@ -83,6 +85,6 @@ export const updateUser = mutationField("updateUser", {
 export const deleteUser = mutationField("deleteUser", {
   type: "String",
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) =>
-    await services.User.remove(id)
+  resolve: async (parent, { id }, { services, userId }) =>
+    await services.User.remove(id, userId)
 });

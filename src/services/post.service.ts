@@ -20,7 +20,13 @@ export default class PostService extends BaseService<Post, PostsRepository> {
     return record;
   }
 
-  async remove(id: string): Promise<number> {
+  async remove(id: string, userId: string): Promise<number> {
+    const record = await this.repo.get(id);
+
+    if (record.user_id != userId) {
+      ErrorHandler.notAuthorized();
+    }
+
     return await this.repo.remove(id);
   }
 
@@ -47,13 +53,22 @@ export default class PostService extends BaseService<Post, PostsRepository> {
     return await this.repo.upsert(payload);
   }
 
-  async update(payload: Post): Promise<Post> {
+  async update(payload: Post, userId: string): Promise<Post> {
     if (!payload || !payload.id) {
       ErrorHandler.badInput("Cannot update record without an id.");
     }
 
     if (!payload.title || !payload.content) {
       ErrorHandler.badInput("Posts must have a title and content.");
+    }
+
+    const original = await this.repo.get(payload.id);
+    if (!original) {
+      ErrorHandler.badInput("No matching record.");
+    }
+
+    if (original.user_id != userId) {
+      ErrorHandler.notAuthorized();
     }
 
     return await this.repo.upsert(payload);

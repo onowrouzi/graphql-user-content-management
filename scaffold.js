@@ -62,9 +62,12 @@ function createSchema() {
     );
 
     fs.writeFileSync(schemaTypesPath, schemaTypes);
+  }
 
-    var indexPath = path.replace(names.kebab, "index");
-    var schemaExports = fs.readFileSync(indexPath, "utf-8");
+  var indexPath = path.replace(names.kebab, "index");
+  var schemaExports = fs.readFileSync(indexPath, "utf-8");
+
+  if (!schemaExports.includes(`export * from "./${names.kebab}";`)) {
     schemaExports += `\nexport * from "./${names.kebab}";`;
 
     fs.writeFileSync(indexPath, schemaExports);
@@ -81,11 +84,9 @@ function createSchema() {
   stringArg
 } from "nexus";          
 import { SchemaTypes } from "./schema-types";
-import Base from "./base";
+import { NexusGenFieldTypes } from "../../generated/nexus-typings";
 
-export default class ${names.proper} extends Base {
-  // define properties here.
-}
+export type ${names.proper} = NexusGenFieldTypes[SchemaTypes.${names.proper}];
 
 export const ${names.camel} = objectType({
   name: SchemaTypes.${names.proper},
@@ -107,18 +108,16 @@ export const create${names.proper} = mutationField("create${names.proper}", {
   args: {
     payload: arg({ type: SchemaTypes.${names.proper}Input, required: true })
   },
-  resolve: async (parent, { payload }, { services }) => {
-    return await services.${names.proper}.save(payload);
-  }
+  resolve: async (parent, { payload }, { services }) => 
+    await services.${names.proper}.save(payload)
 });
 
 export const get${names.proper} = queryField("${names.camel}", {
   type: SchemaTypes.${names.proper},
   nullable: true,
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) => {
-    return await services.${names.proper}.get(id);
-  }
+  resolve: async (parent, { id }, { services }) => 
+    await services.${names.proper}.get(id)
 });
 
 export const update${names.proper} = mutationField("update${names.proper}", {
@@ -126,17 +125,15 @@ export const update${names.proper} = mutationField("update${names.proper}", {
   args: {
     payload: arg({ type: SchemaTypes.${names.proper}Input, required: true })
   },
-  resolve: async (parent, { payload }, { services }) => {
-    return await services.${names.proper}.update(payload);
-  }
+  resolve: async (parent, { payload }, { services }) => 
+    await services.${names.proper}.update(payload)
 });
 
 export const delete${names.proper} = mutationField("delete${names.proper}", {
   type: "String",
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) => {
-    return await services.${names.proper}.remove(id);
-  }
+  resolve: async (parent, { id }, { services }) => 
+    await services.${names.proper}.remove(id)
 });
 `
   );
@@ -210,7 +207,7 @@ function createRepository() {
     `import { BaseRepository } from "./base.repository";
 import { SchemaTypes } from "../schemas/schema-types";
 import sql from "../sql/sql-parser";
-import ${names.proper} from "../schemas/${names.kebab}";
+import { ${names.proper} } from "../schemas/${names.kebab}";
 
 export default class ${names.proper}sRepository extends BaseRepository<${
       names.proper
@@ -280,7 +277,7 @@ function createService() {
   fs.writeFileSync(
     path,
     `import { BaseService } from "./base.service";
-import ${names.proper} from "./../schemas/${names.kebab}";
+import { ${names.proper} } from "./../schemas/${names.kebab}";
 import ${names.proper}sRepository from "./../repositories/${
       names.kebab
     }.repository";

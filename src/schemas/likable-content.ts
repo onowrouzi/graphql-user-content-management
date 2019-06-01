@@ -1,6 +1,6 @@
 import { interfaceType } from "nexus/dist";
 import { SchemaTypes } from "./schema-types";
-import { NexusGenFieldTypes } from "../../generated/typings";
+import { NexusGenFieldTypes } from "../../generated/nexus-typings";
 
 export type LikableContent = NexusGenFieldTypes[SchemaTypes.LikableContent];
 

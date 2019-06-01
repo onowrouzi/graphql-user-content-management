@@ -1,7 +1,7 @@
 import { interfaceType, asNexusMethod } from "nexus";
 import { SchemaTypes } from "./schema-types";
 import { GraphQLDateTime } from "graphql-iso-date";
-import { NexusGenFieldTypes } from "./../../generated/typings";
+import { NexusGenFieldTypes } from "./../../generated/nexus-typings";
 
 /**
  * Registers GraphQLDateTime scalar type to nexus (ex: t.date("my_date_time")).

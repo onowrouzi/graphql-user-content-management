@@ -2,23 +2,29 @@ require("dotenv").config();
 
 import { ApolloServer } from "apollo-server";
 import { makeSchema } from "nexus";
+import { applyMiddleware } from "graphql-middleware";
 import path from "path";
 
 import * as allTypes from "./schemas";
 import { Db } from "./db";
 import { getServices } from "./services";
+import { permissions } from "./rules/permissions";
+import AuthorizationService from "./services/authorization.service";
 
 const start = async () => {
   /**
    * This method utilizes nexus to auto-generate schemas for graphql.
    */
-  const schema = makeSchema({
-    types: [allTypes],
-    outputs: {
-      schema: path.join(__dirname, "./../generated/schema.graphql"),
-      typegen: path.join(__dirname, "./../generated/typings.ts")
-    }
-  });
+  const schema = applyMiddleware(
+    makeSchema({
+      types: [allTypes],
+      outputs: {
+        schema: path.join(__dirname, "./../../generated/schema.graphql"),
+        typegen: path.join(__dirname, "./../../generated/nexus-typings.ts")
+      }
+    }),
+    permissions
+  );
 
   /**
    * Attempt to connect to database and start Apollo Sever.
@@ -30,7 +36,17 @@ const start = async () => {
       schema,
       mocks: false,
       context: async ({ req }) => ({
-        services: getServices()
+        req,
+        services: getServices(),
+        userId: (() => {
+          const token =
+            req && req.headers && req.headers.authorization
+              ? req.headers.authorization.trim()
+              : null;
+          if (token) {
+            return AuthorizationService.getUserId(token);
+          }
+        })()
       }),
       formatError: err => {
         // write generic graphql error intercepting logic here.

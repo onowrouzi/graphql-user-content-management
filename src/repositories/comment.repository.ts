@@ -46,7 +46,7 @@ export default class CommentsRepository extends BaseRepository<Comment> {
       {
         comment_id: commentId
       },
-      res => res.max || 0
+      (res: any) => res.max || 0
     );
   }
 }

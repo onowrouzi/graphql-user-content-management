@@ -1,16 +1,12 @@
+import Repositories from "./repositories";
 import UserLikesRepository from "./repositories/user-like.repository";
 import CommentsRepository from "./repositories/comment.repository";
 import PostsRepository from "./repositories/post.repository";
 import UsersRepository from "./repositories/user.repository";
+
 import * as bluebird from "bluebird";
-import * as path from "path";
 import { IMain, IDatabase, IOptions } from "pg-promise";
 import pgPromise from "pg-promise";
-
-import { Repositories } from "./repositories";
-import ExamplesRepository from "./repositories/example.repository";
-
-const cp = require("copyfiles");
 
 /**
  * Singleton database connection class.
@@ -23,9 +19,7 @@ export class Db {
     return this.instance || (this.instance = new this());
   }
 
-  private constructor() {
-    this.copySqlFiles();
-  }
+  private constructor() {}
 
   /**
    * Initial connection logic.
@@ -49,7 +43,6 @@ export class Db {
         obj.Comments = new CommentsRepository();
         obj.Posts = new PostsRepository();
         obj.Users = new UsersRepository();
-        obj.Examples = new ExamplesRepository();
       }
     };
 
@@ -81,21 +74,6 @@ export class Db {
     this.connection.Users.createTable();
     this.connection.Posts.createTable();
     this.connection.Comments.createTable();
-    this.connection.Examples.createTable();
     this.connection.UserLikes.createTable();
-  }
-
-  /**
-   * Copies sql files from original src to a flattened sql directory in dist.
-   */
-  copySqlFiles() {
-    const sqlDir = path.join(__dirname, "../../src/sql/**/*.sql");
-    const distDir = path.join(__dirname, "sql");
-
-    cp([sqlDir, distDir], true, (err: any) => {
-      if (err) {
-        console.error(err);
-      }
-    });
   }
 }

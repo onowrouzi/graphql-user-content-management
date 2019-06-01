@@ -27,12 +27,8 @@ export default class UserLikeService extends BaseService<
     throw new Error("Method not implemented");
   }
 
-  async removeUserLike(userId: string, contentId: string): Promise<number> {
+  async remove(userId: string, contentId: string): Promise<number> {
     return await this.repo.removeUserLike(userId, contentId);
-  }
-
-  remove(id: string): Promise<number> {
-    throw new Error("Method not implemented");
   }
 
   async query(userId: string): Promise<Array<UserLike>> {
