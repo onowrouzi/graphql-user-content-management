@@ -225,8 +225,8 @@ export interface NexusGenArgTypes {
       payload: NexusGenInputs['post_input']; // post_input!
     }
     createUser: { // args
+      email: string; // String!
       password: string; // String!
-      payload: NexusGenInputs['user_input']; // user_input!
     }
     createUserLike: { // args
       payload: NexusGenInputs['user_like_input']; // user_like_input!

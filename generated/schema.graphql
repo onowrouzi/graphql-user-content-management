@@ -68,7 +68,7 @@ union like_types_union = comment | post
 type Mutation {
   createComment(payload: comment_input!): comment!
   createPost(payload: post_input!): post!
-  createUser(password: String!, payload: user_input!): user!
+  createUser(email: String!, password: String!): user!
   createUserLike(payload: user_like_input!): user_like!
   deleteComment(id: String!): String!
   deletePost(id: String!): String!

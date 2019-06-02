@@ -8,7 +8,6 @@ import {
 } from "nexus";
 import { SchemaTypes } from "./schema-types";
 import { NexusGenFieldTypes } from "../../generated/nexus-typings";
-import AuthorizationService from "../services/authorization.service";
 
 export type User = NexusGenFieldTypes[SchemaTypes.User];
 
@@ -48,11 +47,11 @@ export const userInputType = inputObjectType({
 export const createUser = mutationField("createUser", {
   type: SchemaTypes.User,
   args: {
-    payload: arg({ type: SchemaTypes.UserInput, required: true }),
+    email: stringArg({ required: true }),
     password: stringArg({ required: true })
   },
-  resolve: async (parent, { payload, password }, { services }) =>
-    await services.User.create(payload, password)
+  resolve: async (parent, { email, password }, { services }) =>
+    await services.User.create(email, password)
 });
 
 export const getUser = queryField("user", {
