@@ -1,0 +1,15 @@
+{
+  "name": "User Content Management Server",
+  "description": "A server for user content management, utilizing Apollo, GraphQL, Typescript, & PostgreSQL.",
+  "repository": "https://github.com/onowrouzi/graphql-user-content-management",
+  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "keywords": [
+    "node",
+    "graphql",
+    "apollo",
+    "postgresql",
+    "typescript",
+    "heroku"
+  ],
+  "image": "heroku/nodejs"
+}

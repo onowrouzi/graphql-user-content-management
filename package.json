@@ -4,7 +4,7 @@
   "description": "This is a base structured project for a GraphQL server, using nexus for schema generation and pg-promise for database operations",
   "main": "dist/src/index.js",
   "scripts": {
-    "start": "node .",
+    "start": "npm run build && node .",
     "build": "tsc && npm run copy-sql",
     "start:dev": "npm run build && concurrently -k -p \"[{name}]\" -c \"yellow.bold,cyan.bold,green.bold\" -n \"TypeScript,Node\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "nodemon -r dotenv/config dist/src",
