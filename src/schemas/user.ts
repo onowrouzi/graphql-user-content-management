@@ -47,11 +47,11 @@ export const userInputType = inputObjectType({
 export const createUser = mutationField("createUser", {
   type: SchemaTypes.User,
   args: {
-    email: stringArg({ required: true }),
+    payload: arg({ type: SchemaTypes.UserInput, required: true }),
     password: stringArg({ required: true })
   },
-  resolve: async (parent, { email, password }, { services }) =>
-    await services.User.create(email, password)
+  resolve: async (parent, { payload, password }, { services }) =>
+    await services.User.create(payload, password)
 });
 
 export const getUser = queryField("user", {
