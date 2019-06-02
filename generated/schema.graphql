@@ -48,6 +48,16 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
 """
 scalar DateTime
 
+type hosted_content implements base {
+  content_type: String!
+  created_at: DateTime!
+  deleted: Boolean!
+  hosted_url: String!
+  id: ID!
+  updated_at: DateTime!
+  user_id: ID!
+}
+
 interface likable_content {
   content: String!
   dislikes_count: Int!
@@ -67,10 +77,12 @@ union like_types_union = comment | post
 
 type Mutation {
   createComment(payload: comment_input!): comment!
+  createHostedContent(url: String!): hosted_content!
   createPost(payload: post_input!): post!
   createUser(password: String!, payload: user_input!): user!
   createUserLike(payload: user_like_input!): user_like!
   deleteComment(id: String!): String!
+  deleteHostedContent(id: String!): String!
   deletePost(id: String!): String!
   deleteUser(id: String!): String!
   deleteUserLike(content_id: String!, user_id: String!): String!
@@ -109,7 +121,9 @@ type Query {
   contentLikes(content_id: String!): [user_like!]!
   getCommentReplies(comment_id: String!): [comment!]!
   getCommentsForPost(post_id: String!): [comment!]!
+  getHostedContentForUser(user_id: String): [hosted_content!]!
   getPostsForUser(user_id: String!): [post!]!
+  hostedContent(id: String!): hosted_content
   post(id: String!): post
   user(id: String!): user
   userLike(content_id: String!, user_id: String!): user_like

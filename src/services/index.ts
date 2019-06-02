@@ -1,3 +1,4 @@
+import HostedContentService from "./hosted-content.service";
 import UserLikeService from "./user-like.service";
 import CommentService from "./comment.service";
 import PostService from "./post.service";
@@ -9,6 +10,7 @@ import AuthorizationService from "./authorization.service";
  */
 export function getServices(): Services {
   return {
+    HostedContent: new HostedContentService(),
     Authorization: new AuthorizationService(),
     UserLike: new UserLikeService(),
     Comment: new CommentService(),
@@ -26,4 +28,5 @@ export default interface Services {
   Comment: CommentService;
   Post: PostService;
   User: UserService;
+  HostedContent: HostedContentService;
 }

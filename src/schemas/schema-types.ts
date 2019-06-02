@@ -3,6 +3,8 @@
  * NOTE: values corresponding with database tables should match casing.
  */
 export const enum SchemaTypes {
+  HostedContent = "hosted_content",
+  HostedContentInput = "hosted_content_input",
   AppToken = "app_token",
   Topic = "topic",
   TopicInput = "topic_input",

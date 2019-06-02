@@ -65,6 +65,15 @@ export interface NexusGenRootTypes {
     updated_at: any; // DateTime!
     user_id: string; // ID!
   }
+  hosted_content: { // root type
+    content_type: string; // String!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    hosted_url: string; // String!
+    id: string; // ID!
+    updated_at: any; // DateTime!
+    user_id: string; // ID!
+  }
   post: { // root type
     content: string; // String!
     created_at: any; // DateTime!
@@ -93,7 +102,7 @@ export interface NexusGenRootTypes {
     updated_at: any; // DateTime!
     user_id: string; // ID!
   }
-  base: NexusGenRootTypes['comment'] | NexusGenRootTypes['user_like'] | NexusGenRootTypes['post'] | NexusGenRootTypes['user'];
+  base: NexusGenRootTypes['comment'] | NexusGenRootTypes['user_like'] | NexusGenRootTypes['post'] | NexusGenRootTypes['user'] | NexusGenRootTypes['hosted_content'];
   likable_content: NexusGenRootTypes['comment'] | NexusGenRootTypes['post'];
   String: string;
   Int: number;
@@ -115,10 +124,12 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createComment: NexusGenRootTypes['comment']; // comment!
+    createHostedContent: NexusGenRootTypes['hosted_content']; // hosted_content!
     createPost: NexusGenRootTypes['post']; // post!
     createUser: NexusGenRootTypes['user']; // user!
     createUserLike: NexusGenRootTypes['user_like']; // user_like!
     deleteComment: string; // String!
+    deleteHostedContent: string; // String!
     deletePost: string; // String!
     deleteUser: string; // String!
     deleteUserLike: string; // String!
@@ -134,7 +145,9 @@ export interface NexusGenFieldTypes {
     contentLikes: NexusGenRootTypes['user_like'][]; // [user_like!]!
     getCommentReplies: NexusGenRootTypes['comment'][]; // [comment!]!
     getCommentsForPost: NexusGenRootTypes['comment'][]; // [comment!]!
+    getHostedContentForUser: NexusGenRootTypes['hosted_content'][]; // [hosted_content!]!
     getPostsForUser: NexusGenRootTypes['post'][]; // [post!]!
+    hostedContent: NexusGenRootTypes['hosted_content'] | null; // hosted_content
     post: NexusGenRootTypes['post'] | null; // post
     user: NexusGenRootTypes['user'] | null; // user
     userLike: NexusGenRootTypes['user_like'] | null; // user_like
@@ -160,6 +173,15 @@ export interface NexusGenFieldTypes {
     reply_depth: number; // Int!
     updated_at: any; // DateTime!
     user: NexusGenRootTypes['user'] | null; // user
+    user_id: string; // ID!
+  }
+  hosted_content: { // field return type
+    content_type: string; // String!
+    created_at: any; // DateTime!
+    deleted: boolean; // Boolean!
+    hosted_url: string; // String!
+    id: string; // ID!
+    updated_at: any; // DateTime!
     user_id: string; // ID!
   }
   post: { // field return type
@@ -221,6 +243,9 @@ export interface NexusGenArgTypes {
     createComment: { // args
       payload: NexusGenInputs['comment_input']; // comment_input!
     }
+    createHostedContent: { // args
+      url: string; // String!
+    }
     createPost: { // args
       payload: NexusGenInputs['post_input']; // post_input!
     }
@@ -232,6 +257,9 @@ export interface NexusGenArgTypes {
       payload: NexusGenInputs['user_like_input']; // user_like_input!
     }
     deleteComment: { // args
+      id: string; // String!
+    }
+    deleteHostedContent: { // args
       id: string; // String!
     }
     deletePost: { // args
@@ -277,8 +305,14 @@ export interface NexusGenArgTypes {
     getCommentsForPost: { // args
       post_id: string; // String!
     }
+    getHostedContentForUser: { // args
+      user_id?: string | null; // String
+    }
     getPostsForUser: { // args
       user_id: string; // String!
+    }
+    hostedContent: { // args
+      id: string; // String!
     }
     post: { // args
       id: string; // String!
@@ -298,13 +332,13 @@ export interface NexusGenArgTypes {
 
 export interface NexusGenAbstractResolveReturnTypes {
   like_types_union: "comment" | "post"
-  base: "comment" | "user_like" | "post" | "user"
+  base: "comment" | "user_like" | "post" | "user" | "hosted_content"
   likable_content: "comment" | "post"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "app_token" | "comment" | "post" | "user" | "user_like";
+export type NexusGenObjectNames = "Mutation" | "Query" | "app_token" | "comment" | "hosted_content" | "post" | "user" | "user_like";
 
 export type NexusGenInputNames = "comment_input" | "post_input" | "user_input" | "user_like_input";
 

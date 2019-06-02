@@ -22,7 +22,7 @@ export abstract class BaseService<T, Repository> {
    * Inserts a record that matches the type T.
    * @param payload : T (generic to be defined in instantiated service/class)
    */
-  abstract save(payload: T): Promise<T>;
+  abstract save(payload: T, userId?: string): Promise<T>;
 
   /**
    * Updates a record that matches the type T and payload's id (uuid).

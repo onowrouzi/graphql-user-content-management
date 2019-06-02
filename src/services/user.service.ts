@@ -2,13 +2,11 @@ import { BaseService } from "./base.service";
 import { User } from "./../schemas/user";
 import UsersRepository from "./../repositories/user.repository";
 import ErrorHandler from "../utilities/error-handler";
+import RegexHelper from "../utilities/regex-helper";
 
 const bcrypt = require("bcrypt");
 
 export default class UserService extends BaseService<User, UsersRepository> {
-  private emailRegex = /^([\w\.\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]{3,}\@([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}))$/;
-  private pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
   constructor() {
     super();
     this.repo = new UsersRepository();
@@ -59,11 +57,11 @@ export default class UserService extends BaseService<User, UsersRepository> {
       ErrorHandler.badInput("Must supply a password for a new user.");
     }
 
-    if (!this.emailRegex.test(payload.email)) {
+    if (!RegexHelper.isValidEmail(payload.email)) {
       ErrorHandler.badInput("Email is not valid.");
     }
 
-    if (!this.pwdRegex.test(password)) {
+    if (!RegexHelper.isValidPassword(password)) {
       ErrorHandler.badInput("Password is not valid.");
     }
 

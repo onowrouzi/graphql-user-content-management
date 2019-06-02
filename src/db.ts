@@ -1,3 +1,4 @@
+import HostedContentsRepository from "./repositories/hosted-content.repository";
 import Repositories from "./repositories";
 import UserLikesRepository from "./repositories/user-like.repository";
 import CommentsRepository from "./repositories/comment.repository";
@@ -39,6 +40,7 @@ export class Db {
       promiseLib: bluebird,
       extend(obj: Repositories, dc: any) {
         // define repositories here.
+        obj.HostedContent = new HostedContentsRepository();
         obj.UserLikes = new UserLikesRepository();
         obj.Comments = new CommentsRepository();
         obj.Posts = new PostsRepository();
@@ -76,5 +78,6 @@ export class Db {
     this.connection.Posts.createTable();
     this.connection.Comments.createTable();
     this.connection.UserLikes.createTable();
+    this.connection.HostedContent.createTable();
   }
 }

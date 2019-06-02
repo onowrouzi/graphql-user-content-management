@@ -1,3 +1,4 @@
+import HostedContentRepository from "./hosted-content.repository";
 import UserLikesRepository from "./user-like.repository";
 import CommentsRepository from "./comment.repository";
 import PostsRepository from "./post.repository";
@@ -11,4 +12,5 @@ export default interface Repositories {
   Comments: CommentsRepository;
   Posts: PostsRepository;
   Users: UsersRepository;
+  HostedContent: HostedContentRepository;
 }

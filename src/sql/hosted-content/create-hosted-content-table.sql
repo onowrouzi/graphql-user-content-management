@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS hosted_content (
+  id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v1(),
+  user_id UUID NOT NULL,
+  content_type VARCHAR(50) NOT NULL,
+  hosted_url VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted BOOLEAN DEFAULT FALSE,
+  UNIQUE(user_id, hosted_url),
+  FOREIGN KEY (user_id) REFERENCES "user"(id)
+)
