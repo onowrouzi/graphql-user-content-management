@@ -21,25 +21,21 @@ export interface NexusGenInputs {
     content?: string | null; // String
     id?: string | null; // ID
     post_id?: string | null; // ID
-    user_id?: string | null; // ID
   }
   post_input: { // input type
     content?: string | null; // String
     id?: string | null; // ID
     title?: string | null; // String
-    user_id?: string | null; // ID
   }
   user_input: { // input type
     email?: string | null; // String
     first_name?: string | null; // String
-    id?: string | null; // ID
     last_name?: string | null; // String
   }
   user_like_input: { // input type
     content_id?: string | null; // ID
     content_type?: NexusGenEnums['like_types'] | null; // like_types
     liked?: boolean | null; // Boolean
-    user_id?: string | null; // ID
   }
 }
 
@@ -318,7 +314,7 @@ export interface NexusGenArgTypes {
       id: string; // String!
     }
     user: { // args
-      id: string; // String!
+      id?: string | null; // String
     }
     userLike: { // args
       content_id: string; // String!

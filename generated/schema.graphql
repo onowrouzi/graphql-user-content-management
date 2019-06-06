@@ -38,7 +38,6 @@ input comment_input {
   content: String
   id: ID
   post_id: ID
-  user_id: ID
 }
 
 """
@@ -113,7 +112,6 @@ input post_input {
   content: String
   id: ID
   title: String
-  user_id: ID
 }
 
 type Query {
@@ -125,7 +123,7 @@ type Query {
   getPostsForUser(user_id: String!): [post!]!
   hostedContent(id: String!): hosted_content
   post(id: String!): post
-  user(id: String!): user
+  user(id: String): user
   userLike(content_id: String!, user_id: String!): user_like
   userLikes(user_id: String!): [user_like!]!
 }
@@ -145,7 +143,6 @@ type user implements base {
 input user_input {
   email: String
   first_name: String
-  id: ID
   last_name: String
 }
 
@@ -166,5 +163,4 @@ input user_like_input {
   content_id: ID
   content_type: like_types
   liked: Boolean
-  user_id: ID
 }

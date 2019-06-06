@@ -62,7 +62,6 @@ export const userLikeInputType = inputObjectType({
   name: SchemaTypes.UserLikeInput,
   definition(t) {
     t.id("content_id");
-    t.id("user_id", { nullable: true });
     t.field("content_type", { type: SchemaTypes.LikeTypes });
     t.boolean("liked");
   }
@@ -73,10 +72,8 @@ export const createUserLike = mutationField("createUserLike", {
   args: {
     payload: arg({ type: SchemaTypes.UserLikeInput, required: true })
   },
-  resolve: async (parent, { payload }, { services, userId }) => {
-    payload.user_id = userId;
-    return await services.UserLike.save(payload);
-  }
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.UserLike.save(payload, userId)
 });
 
 export const getUserLike = queryField("userLike", {
@@ -111,10 +108,8 @@ export const updateUserLike = mutationField("updateUserLike", {
   args: {
     payload: arg({ type: SchemaTypes.UserLikeInput, required: true })
   },
-  resolve: async (parent, { payload }, { services, userId }) => {
-    payload.user_id = userId;
-    return await services.UserLike.update(payload);
-  }
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.UserLike.update(payload, userId)
 });
 
 export const deleteUserLike = mutationField("deleteUserLike", {

@@ -36,11 +36,7 @@ export default class UserService extends BaseService<User, UsersRepository> {
     return record;
   }
 
-  async remove(id: string, reqUserId: string): Promise<number> {
-    if (id != reqUserId) {
-      ErrorHandler.notAuthorized();
-    }
-
+  async remove(id: string): Promise<number> {
     return await this.repo.remove(id);
   }
 
@@ -80,7 +76,9 @@ export default class UserService extends BaseService<User, UsersRepository> {
     throw new Error("Method not implemented.");
   }
 
-  async update(payload: User): Promise<User> {
+  async update(payload: User, userId: string): Promise<User> {
+    payload.id = userId;
+
     if (!payload || !payload.id) {
       ErrorHandler.badInput("Cannot update record without an id.");
     }

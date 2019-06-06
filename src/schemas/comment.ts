@@ -42,7 +42,6 @@ export const commentInputType = inputObjectType({
     t.id("id", { nullable: true });
     t.id("post_id");
     t.id("comment_id", { nullable: true });
-    t.id("user_id", { nullable: true });
     t.string("content");
   }
 });
@@ -52,10 +51,8 @@ export const createComment = mutationField("createComment", {
   args: {
     payload: arg({ type: SchemaTypes.CommentInput, required: true })
   },
-  resolve: async (parent, { payload }, { services, userId }) => {
-    payload.user_id = userId;
-    return await services.Comment.save(payload);
-  }
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.Comment.save(payload, userId)
 });
 
 export const getCommentsForPost = queryField("getCommentsForPost", {

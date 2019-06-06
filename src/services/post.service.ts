@@ -34,7 +34,9 @@ export default class PostService extends BaseService<Post, PostsRepository> {
     return await this.repo.query(userId);
   }
 
-  async save(payload: Post): Promise<Post> {
+  async save(payload: Post, userId: string): Promise<Post> {
+    payload.user_id = userId;
+
     if (!payload || payload.id) {
       ErrorHandler.badInput("Cannot insert record with an id.");
     }

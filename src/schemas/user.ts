@@ -37,7 +37,6 @@ export const user = objectType({
 export const userInputType = inputObjectType({
   name: SchemaTypes.UserInput,
   definition(t) {
-    t.id("id", { nullable: true });
     t.string("first_name");
     t.string("last_name");
     t.string("email");
@@ -57,8 +56,9 @@ export const createUser = mutationField("createUser", {
 export const getUser = queryField("user", {
   type: SchemaTypes.User,
   nullable: true,
-  args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services }) => await services.User.get(id)
+  args: { id: stringArg({ nullable: true }) },
+  resolve: async (parent, { id }, { services, userId }) =>
+    await services.User.get(id || userId)
 });
 
 export const updateUser = mutationField("updateUser", {
@@ -66,13 +66,13 @@ export const updateUser = mutationField("updateUser", {
   args: {
     payload: arg({ type: SchemaTypes.UserInput, required: true })
   },
-  resolve: async (parent, { payload }, { services }) =>
-    await services.User.update(payload)
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.User.update(payload, userId)
 });
 
 export const deleteUser = mutationField("deleteUser", {
   type: "String",
   args: { id: stringArg({ required: true }) },
-  resolve: async (parent, { id }, { services, userId }) =>
-    await services.User.remove(id, userId)
+  resolve: async (parent, {}, { services, userId }) =>
+    await services.User.remove(userId)
 });

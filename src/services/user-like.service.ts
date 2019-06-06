@@ -47,7 +47,9 @@ export default class UserLikeService extends BaseService<
     return await this.repo.getCount(contentId, contentType, liked);
   }
 
-  async save(payload: UserLike): Promise<UserLike> {
+  async save(payload: UserLike, userId: string): Promise<UserLike> {
+    payload.user_id = userId;
+
     if (!payload || !payload.user_id || !payload.content_id) {
       ErrorHandler.badInput("Record must have user_id & content_id.");
     }
@@ -59,7 +61,9 @@ export default class UserLikeService extends BaseService<
     return await this.repo.upsert(payload);
   }
 
-  async update(payload: UserLike): Promise<UserLike> {
+  async update(payload: UserLike, userId: string): Promise<UserLike> {
+    payload.user_id = userId;
+
     if (!payload || !payload.user_id || !payload.content_id) {
       ErrorHandler.badInput("Record must have user_id & content_id.");
     }

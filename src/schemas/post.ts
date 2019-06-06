@@ -31,7 +31,6 @@ export const postInputType = inputObjectType({
   name: SchemaTypes.PostInput,
   definition(t) {
     t.id("id", { nullable: true });
-    t.id("user_id", { nullable: true });
     t.string("title");
     t.string("content");
   }
@@ -42,10 +41,8 @@ export const createPost = mutationField("createPost", {
   args: {
     payload: arg({ type: SchemaTypes.PostInput, required: true })
   },
-  resolve: async (parent, { payload }, { services, userId }) => {
-    payload.user_id = userId;
-    return await services.Post.save(payload);
-  }
+  resolve: async (parent, { payload }, { services, userId }) =>
+    await services.Post.save(payload, userId)
 });
 
 export const getPost = queryField("post", {

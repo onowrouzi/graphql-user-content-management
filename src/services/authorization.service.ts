@@ -2,8 +2,11 @@ import * as jwt from "jsonwebtoken";
 import ErrorHandler from "../utilities/error-handler";
 
 export default class AuthorizationService {
+  private static readonly expiresMs =
+    parseInt(process.env.TOKEN_EXPIRATION_MS) || 3600000;
+
   static createToken(userId: string): AppToken {
-    const expiresAt = new Date(Date.now() + 3600000);
+    const expiresAt = new Date(Date.now() + this.expiresMs);
     const exp = Math.floor(expiresAt.getTime() / 1000);
     var token = jwt.sign({ exp, userId }, process.env.APP_SECRET);
 
@@ -39,7 +42,7 @@ export default class AuthorizationService {
         process.env.APP_SECRET
       ) as AppTokenVerification;
 
-      if (verification) {
+      if (verification && !verification.isRefresh) {
         return verification.userId;
       }
     } catch (err) {

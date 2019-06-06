@@ -45,7 +45,9 @@ export default class CommentService extends BaseService<
     return await this.repo.getReplyDepth(commentId);
   }
 
-  async save(payload: Comment): Promise<Comment> {
+  async save(payload: Comment, userId: string): Promise<Comment> {
+    payload.user_id = userId;
+
     if (!payload || payload.id) {
       ErrorHandler.badInput("Cannot insert record with an id.");
     }
