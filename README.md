@@ -26,7 +26,7 @@ and then
 
 ```
 mutation {
-  loginUser(email: "you@email.com", password: "P@ssword!") {
+  loginUser(email: "you@email.com", password: "P@ssw0rd!") {
     token
     refreshToken
     expiresAt
@@ -40,3 +40,17 @@ then make your requests with your token in this HTTP header:
   "authorization": "your_token_here"
 }
 ```
+
+Example query 
+```
+query {
+  user {
+    id
+    first_name
+    last_name
+    email
+  }
+}
+```
+
+Schemas/Requests can be found on the right by clicking the green SCHEMA tab.
