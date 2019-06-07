@@ -78,16 +78,21 @@ type Mutation {
   createComment(payload: comment_input!): comment!
   createHostedContent(url: String!): hosted_content!
   createPost(payload: post_input!): post!
+  createTopic(payload: topic_input!): topic!
+  createTopicUser(payload: topic_user_input!): topic_user!
   createUser(password: String!, payload: user_input!): user!
   createUserLike(payload: user_like_input!): user_like!
   deleteComment(id: String!): String!
   deleteHostedContent(id: String!): String!
   deletePost(id: String!): String!
+  deleteTopic(id: String!): String!
+  deleteTopicUser(topic_id: String!, user_id: String!): String!
   deleteUser(id: String!): String!
   deleteUserLike(content_id: String!, user_id: String!): String!
   loginUser(email: String!, password: String!): app_token!
   updateComment(payload: comment_input!): comment!
   updatePost(payload: post_input!): post!
+  updateTopic(payload: topic_input!): topic!
   updateUser(payload: user_input!): user!
   updateUserLike(payload: user_like_input!): user_like!
   useRefreshToken(refreshToken: String!): app_token!
@@ -120,12 +125,58 @@ type Query {
   getCommentReplies(comment_id: String!): [comment!]!
   getCommentsForPost(post_id: String!): [comment!]!
   getHostedContentForUser(user_id: String): [hosted_content!]!
-  getPostsForUser(user_id: String!): [post!]!
+  getPostsForTopic(topic_id: String!): [post!]!
+  getPostsForUser(user_id: String): [post!]!
   hostedContent(id: String!): hosted_content
   post(id: String!): post
+  topic(id: String!): topic
+  TopicUser(topic_id: String!, user_id: String!): topic_user
+  TopicUsers(topic_id: String!): [topic_user!]!
   user(id: String): user
   userLike(content_id: String!, user_id: String!): user_like
   userLikes(user_id: String!): [user_like!]!
+}
+
+type topic implements base {
+  created_at: DateTime!
+  deleted: Boolean!
+  id: ID!
+  is_private: Boolean!
+  posts: [post!]
+  title: String!
+  topic_users: [topic_user!]
+  updated_at: DateTime!
+}
+
+input topic_input {
+  id: ID
+  is_private: Boolean
+  title: String
+}
+
+type topic_user implements base {
+  created_at: DateTime!
+  deleted: Boolean!
+  id: ID!
+  topic: topic
+  topic_id: ID!
+  topic_role: topic_user_roles!
+  updated_at: DateTime!
+  user: user
+  user_id: ID!
+}
+
+input topic_user_input {
+  topic_id: ID
+  topic_role: topic_user_roles
+  user_id: ID
+}
+
+enum topic_user_roles {
+  contributor
+  moderator
+  owner
+  viewer
 }
 
 type user implements base {
@@ -137,6 +188,7 @@ type user implements base {
   last_name: String!
   likes: [user_like!]
   posts: [post!]
+  topics: [topic!]
   updated_at: DateTime!
 }
 

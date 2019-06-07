@@ -11,24 +11,24 @@ export const likableContent = interfaceType({
     t.string("content");
     t.id("user_id");
     t.int("likes_count", {
-      resolve: async (parent: LikableContent, {}, { services }) =>
-        await services.UserLike.getCount(parent.id, SchemaTypes.Post, true)
+      resolve: (parent: LikableContent, {}, { services }) =>
+        services.UserLike.getCount(parent.id, SchemaTypes.Post, true)
     });
     t.int("dislikes_count", {
-      resolve: async (parent: LikableContent, {}, { services }) =>
-        await services.UserLike.getCount(parent.id, SchemaTypes.Post, false)
+      resolve: (parent: LikableContent, {}, { services }) =>
+        services.UserLike.getCount(parent.id, SchemaTypes.Post, false)
     });
     t.field("user", {
       type: SchemaTypes.User,
       nullable: true,
-      resolve: async (parent: LikableContent, {}, { services }) =>
-        await services.User.get(parent.user_id)
+      resolve: (parent: LikableContent, {}, { services }) =>
+        services.User.get(parent.user_id)
     });
     t.list.field("likes", {
       type: SchemaTypes.UserLike,
       nullable: true,
-      resolve: async (parent: LikableContent, {}, { services }) =>
-        await services.UserLike.getContentLikes(parent.id)
+      resolve: (parent: LikableContent, {}, { services }) =>
+        services.UserLike.getContentLikes(parent.id)
     });
     t.resolveType((data: any) => null);
   }

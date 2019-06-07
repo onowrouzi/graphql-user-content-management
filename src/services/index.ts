@@ -4,6 +4,8 @@ import CommentService from "./comment.service";
 import PostService from "./post.service";
 import UserService from "./user.service";
 import AuthorizationService from "./authorization.service";
+import TopicService from "./topic.service";
+import TopicUserService from "./topic-user.service";
 
 /**
  * Simple method for initializing and retrieving necessary services.
@@ -15,7 +17,9 @@ export function getServices(): Services {
     UserLike: new UserLikeService(),
     Comment: new CommentService(),
     Post: new PostService(),
-    User: new UserService()
+    User: new UserService(),
+    Topic: new TopicService(),
+    TopicUser: new TopicUserService()
   };
 }
 
@@ -29,4 +33,6 @@ export default interface Services {
   Post: PostService;
   User: UserService;
   HostedContent: HostedContentService;
+  Topic: TopicService;
+  TopicUser: TopicUserService;
 }

@@ -21,8 +21,8 @@ export const post = objectType({
     t.list.field("comments", {
       type: SchemaTypes.Comment,
       nullable: true,
-      resolve: async (comment: Comment, {}, { services }) =>
-        await services.Comment.query(comment.id)
+      resolve: (comment: Comment, {}, { services }) =>
+        services.Comment.query(comment.id)
     });
   }
 });
@@ -55,9 +55,17 @@ export const getPost = queryField("post", {
 export const getPostsForUser = queryField("getPostsForUser", {
   type: SchemaTypes.Post,
   list: true,
-  args: { user_id: stringArg({ required: true }) },
-  resolve: async (parent, { user_id }, { services }) =>
-    await services.Post.query(user_id)
+  args: { user_id: stringArg({ nullable: true }) },
+  resolve: async (parent, { user_id }, { services, userId }) =>
+    await services.Post.query(user_id || userId)
+});
+
+export const getPostsForTopic = queryField("getPostsForTopic", {
+  type: SchemaTypes.Post,
+  list: true,
+  args: { topic_id: stringArg({ required: true }) },
+  resolve: async (parent, { topic_id }, { services }) =>
+    await services.Post.getPostsForTopic(topic_id)
 });
 
 export const updatePost = mutationField("updatePost", {

@@ -34,6 +34,10 @@ export default class PostService extends BaseService<Post, PostsRepository> {
     return await this.repo.query(userId);
   }
 
+  async getPostsForTopic(topicId: string): Promise<Array<Post>> {
+    return await this.repo.getPostsForTopic(topicId);
+  }
+
   async save(payload: Post, userId: string): Promise<Post> {
     payload.user_id = userId;
 

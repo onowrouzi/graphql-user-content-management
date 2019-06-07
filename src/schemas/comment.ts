@@ -19,19 +19,19 @@ export const comment = objectType({
     t.id("comment_id", { nullable: true });
     t.id("post_id", { nullable: true });
     t.int("reply_depth", {
-      resolve: async (comment: Comment, {}, { services }) =>
-        await services.Comment.getReplyDepth(comment.id)
+      resolve: (comment: Comment, {}, { services }) =>
+        services.Comment.getReplyDepth(comment.id)
     });
     t.field("post", {
       type: SchemaTypes.Post,
-      resolve: async (comment: Comment, {}, { services }) =>
-        await services.Post.get(comment.post_id)
+      resolve: (comment: Comment, {}, { services }) =>
+        services.Post.get(comment.post_id)
     });
     t.list.field("replies", {
       type: SchemaTypes.Comment,
       nullable: true,
-      resolve: async (comment: Comment, {}, { services }) =>
-        await services.Comment.getCommentReplies(comment.id)
+      resolve: (comment: Comment, {}, { services }) =>
+        services.Comment.getCommentReplies(comment.id)
     });
   }
 });

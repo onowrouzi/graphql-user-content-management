@@ -9,3 +9,5 @@ export * from "./user-like";
 export * from "./likable-content";
 export * from "./app-token";
 export * from "./hosted-content";
+export * from "./topic";
+export * from "./topic-user";

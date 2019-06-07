@@ -8,6 +8,8 @@ import UsersRepository from "./repositories/user.repository";
 import * as bluebird from "bluebird";
 import { IMain, IDatabase, IOptions } from "pg-promise";
 import pgPromise from "pg-promise";
+import TopicsRepository from "./repositories/topic.repository";
+import TopicUsersRepository from "./repositories/topic-user.repository";
 
 /**
  * Singleton database connection class.
@@ -45,6 +47,8 @@ export class Db {
         obj.Comments = new CommentsRepository();
         obj.Posts = new PostsRepository();
         obj.Users = new UsersRepository();
+        obj.Topics = new TopicsRepository();
+        obj.TopicUsers = new TopicUsersRepository();
       }
     };
 
@@ -79,5 +83,7 @@ export class Db {
     this.connection.Comments.createTable();
     this.connection.UserLikes.createTable();
     this.connection.HostedContent.createTable();
+    this.connection.Topics.createTable();
+    this.connection.TopicUsers.createTable();
   }
 }

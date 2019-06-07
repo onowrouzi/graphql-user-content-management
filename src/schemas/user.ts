@@ -19,17 +19,21 @@ export const user = objectType({
     t.string("first_name");
     t.string("last_name");
     t.string("email");
+    t.list.field("topics", {
+      type: SchemaTypes.Topic,
+      nullable: true,
+      resolve: (user: User, {}, { services }) => services.Topic.query(user.id)
+    });
     t.list.field("posts", {
       type: SchemaTypes.Post,
       nullable: true,
-      resolve: async (user: User, {}, { services }) =>
-        await services.Post.query(user.id)
+      resolve: (user: User, {}, { services }) => services.Post.query(user.id)
     });
     t.list.field("likes", {
       type: SchemaTypes.UserLike,
       nullable: true,
-      resolve: async (user: User, {}, { services }) =>
-        await services.UserLike.query(user.id)
+      resolve: (user: User, {}, { services }) =>
+        services.UserLike.query(user.id)
     });
   }
 });

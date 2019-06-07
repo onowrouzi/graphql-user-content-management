@@ -41,17 +41,17 @@ export const userLike = objectType({
     t.field("content_type", { type: SchemaTypes.LikeTypes });
     t.field("user", {
       type: SchemaTypes.User,
-      resolve: async (userLike: UserLike, {}, { services }) =>
-        await services.User.get(userLike.user_id)
+      resolve: (userLike: UserLike, {}, { services }) =>
+        services.User.get(userLike.user_id)
     });
     t.field("content", {
       type: SchemaTypes.LikeTypesUnion,
-      resolve: async (userLike: UserLike, {}, { services }) => {
+      resolve: (userLike: UserLike, {}, { services }) => {
         switch (userLike.content_type) {
           case "post":
-            return await services.Post.get(userLike.content_id);
+            return services.Post.get(userLike.content_id);
           case "comment":
-            return await services.Comment.get(userLike.content_id);
+            return services.Comment.get(userLike.content_id);
         }
       }
     });

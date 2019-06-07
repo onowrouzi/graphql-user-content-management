@@ -54,10 +54,6 @@ export default class HostedContentService extends BaseService<
     payload.user_id = userId;
     payload.content_type = await this.getContentType(payload.hosted_url);
 
-    if (!payload.content_type) {
-      ErrorHandler.badInput("Could not get content type from url.");
-    }
-
     return await this.repo.insert(payload);
   }
 
@@ -73,7 +69,7 @@ export default class HostedContentService extends BaseService<
           res(response.headers["content-type"]);
         });
       } catch (err) {
-        res(null);
+        ErrorHandler.badInput("Could not get content type from url.");
       }
     });
   }

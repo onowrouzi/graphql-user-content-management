@@ -10,6 +10,7 @@ import { Db } from "./db";
 import { getServices } from "./services";
 import { permissions } from "./rules/permissions";
 import AuthorizationService from "./services/authorization.service";
+import { ContextualizedQueryLatencyStats } from "apollo-engine-reporting-protobuf";
 
 const start = async () => {
   /**

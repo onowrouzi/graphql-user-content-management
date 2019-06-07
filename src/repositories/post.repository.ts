@@ -28,6 +28,13 @@ export default class PostsRepository extends BaseRepository<Post> {
     }
   }
 
+  async getPostsForTopic(topicId: string): Promise<Post[]> {
+    return await this.db.connection.any(sql("get-posts-for-topic.sql"), {
+      table: this.table,
+      topic_id: topicId
+    });
+  }
+
   async query(userId: string): Promise<Post[]> {
     return await this.db.connection.any(sql("get-posts-for-user.sql"), {
       table: this.table,
