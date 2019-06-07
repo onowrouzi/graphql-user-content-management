@@ -39,7 +39,7 @@ export default class TopicsRepository extends BaseRepository<Topic> {
     }
   }
 
-  async query(userId: string): Promise<Topic[]> {
+  async query(userId?: string): Promise<Topic[]> {
     return await this.db.connection.any(sql("get-topics-for-user.sql"), {
       user_id: userId,
       order_by: "created_at"

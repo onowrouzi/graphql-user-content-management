@@ -183,6 +183,7 @@ export interface NexusGenFieldTypes {
     hostedContent: NexusGenRootTypes['hosted_content'] | null; // hosted_content
     post: NexusGenRootTypes['post'] | null; // post
     topic: NexusGenRootTypes['topic'] | null; // topic
+    topics: NexusGenRootTypes['topic'][] | null; // [topic!]
     TopicUser: NexusGenRootTypes['topic_user'] | null; // topic_user
     TopicUsers: NexusGenRootTypes['topic_user'][]; // [topic_user!]!
     user: NexusGenRootTypes['user'] | null; // user

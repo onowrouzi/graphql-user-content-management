@@ -46,7 +46,7 @@ export default class TopicService extends BaseService<Topic, TopicsRepository> {
     return await this.repo.remove(id);
   }
 
-  async query(userId: string): Promise<Array<Topic>> {
+  async query(userId?: string): Promise<Array<Topic>> {
     return await this.repo.query(userId);
   }
 

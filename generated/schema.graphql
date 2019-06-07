@@ -130,6 +130,7 @@ type Query {
   hostedContent(id: String!): hosted_content
   post(id: String!): post
   topic(id: String!): topic
+  topics: [topic!]
   TopicUser(topic_id: String!, user_id: String!): topic_user
   TopicUsers(topic_id: String!): [topic_user!]!
   user(id: String): user

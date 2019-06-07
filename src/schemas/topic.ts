@@ -58,6 +58,14 @@ export const getTopic = queryField("topic", {
     await services.Topic.getTopic(id, userId)
 });
 
+export const getTopics = queryField("topics", {
+  type: SchemaTypes.Topic,
+  nullable: true,
+  list: true,
+  args: {},
+  resolve: async (parent, {}, { services }) => await services.Topic.query()
+});
+
 export const updateTopic = mutationField("updateTopic", {
   type: SchemaTypes.Topic,
   args: {
