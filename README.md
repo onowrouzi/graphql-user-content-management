@@ -8,25 +8,29 @@ NOTE: This is a free instance, as such it may take a minute for the server to st
 ## GETTING STARTED
 
 ```
-createUser(payload: {
-  first_name: "First",
-  last_name: "Last",
-  email: "you@email.com"
-}, password: "P@ssw0rd!") {
-  id
-  first_name
-  last_name
-  email
+mutation {
+  createUser(payload: {
+    first_name: "First",
+    last_name: "Last",
+    email: "you@email.com"
+  }, password: "P@ssw0rd!") {
+    id
+    first_name
+    last_name
+    email
+  }
 }
 ```
 
 and then
 
 ```
-loginUser(email: "you@email.com", password: "P@ssword!") {
-  token
-  refreshToken
-  expiresAt
+mutation {
+  loginUser(email: "you@email.com", password: "P@ssword!") {
+    token
+    refreshToken
+    expiresAt
+  }
 }
 ```
 
