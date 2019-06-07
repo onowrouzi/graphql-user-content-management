@@ -108,6 +108,7 @@ type post implements base & likable_content {
   likes: [user_like!]
   likes_count: Int!
   title: String!
+  topic_id: ID
   updated_at: DateTime!
   user: user
   user_id: ID!
@@ -117,6 +118,7 @@ input post_input {
   content: String
   id: ID
   title: String
+  topic_id: ID
 }
 
 type Query {

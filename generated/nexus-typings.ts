@@ -26,6 +26,7 @@ export interface NexusGenInputs {
     content?: string | null; // String
     id?: string | null; // ID
     title?: string | null; // String
+    topic_id?: string | null; // ID
   }
   topic_input: { // input type
     id?: string | null; // ID
@@ -87,6 +88,7 @@ export interface NexusGenRootTypes {
     deleted: boolean; // Boolean!
     id: string; // ID!
     title: string; // String!
+    topic_id?: string | null; // ID
     updated_at: any; // DateTime!
     user_id: string; // ID!
   }
@@ -231,6 +233,7 @@ export interface NexusGenFieldTypes {
     likes: NexusGenRootTypes['user_like'][] | null; // [user_like!]
     likes_count: number; // Int!
     title: string; // String!
+    topic_id: string | null; // ID
     updated_at: any; // DateTime!
     user: NexusGenRootTypes['user'] | null; // user
     user_id: string; // ID!

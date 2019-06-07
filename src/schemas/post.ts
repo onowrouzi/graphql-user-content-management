@@ -18,6 +18,7 @@ export const post = objectType({
     t.implements(SchemaTypes.Base);
     t.implements(SchemaTypes.LikableContent);
     t.string("title");
+    t.id("topic_id", { nullable: true });
     t.list.field("comments", {
       type: SchemaTypes.Comment,
       nullable: true,
@@ -31,6 +32,7 @@ export const postInputType = inputObjectType({
   name: SchemaTypes.PostInput,
   definition(t) {
     t.id("id", { nullable: true });
+    t.id("topic_id", { nullable: true });
     t.string("title");
     t.string("content");
   }
