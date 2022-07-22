@@ -19,7 +19,7 @@
     "bcrypt": "^3.0.6",
     "bluebird": "^3.5.4",
     "dotenv": "^8.0.0",
-    "file-type": "^11.1.0",
+    "file-type": "^16.5.4",
     "graphql": "^14.3.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-middleware": "^3.0.2",
