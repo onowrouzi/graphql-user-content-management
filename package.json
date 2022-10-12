@@ -15,7 +15,7 @@
   "author": "Omid Nowrouzi <onowrouzi@outlook.com>",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.5.0",
+    "apollo-server": "^2.25.4",
     "bcrypt": "^3.0.6",
     "bluebird": "^3.5.4",
     "dotenv": "^8.0.0",
